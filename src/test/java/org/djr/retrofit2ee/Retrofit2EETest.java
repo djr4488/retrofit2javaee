@@ -1,10 +1,5 @@
 package org.djr.retrofit2ee;
 
-import org.djr.retrofit2ee.json.JacksonFeatureEnumerations;
-import org.djr.retrofit2ee.json.JacksonFeature;
-import org.djr.retrofit2ee.json.JacksonConfig;
-import org.djr.retrofit2ee.json.JacksonModule;
-import org.djr.retrofit2ee.json.JacksonProperty;
 import org.djr.retrofit2ee.retrofit.JsonRetrofitProducer;
 import org.jglue.cdiunit.AdditionalClasses;
 import org.jglue.cdiunit.CdiRunner;
