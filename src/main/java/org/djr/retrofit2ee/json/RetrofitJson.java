@@ -1,4 +1,4 @@
-package org.djr.retrofit2ee;
+package org.djr.retrofit2ee.json;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.Retention;

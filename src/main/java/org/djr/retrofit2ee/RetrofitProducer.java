@@ -1,4 +1,4 @@
-package org.djr.retrofit2ee.retrofit;
+package org.djr.retrofit2ee;
 
 import javax.enterprise.inject.spi.InjectionPoint;
 

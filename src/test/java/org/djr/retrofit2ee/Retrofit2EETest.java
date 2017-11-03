@@ -1,6 +1,18 @@
 package org.djr.retrofit2ee;
 
-import org.djr.retrofit2ee.retrofit.JsonRetrofitProducer;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import org.djr.retrofit2ee.json.DeserializationFeatureConfig;
+import org.djr.retrofit2ee.json.JacksonDeserializationFeature;
+import org.djr.retrofit2ee.json.JacksonMapperFeature;
+import org.djr.retrofit2ee.json.JacksonModule;
+import org.djr.retrofit2ee.json.JacksonSerializationFeature;
+import org.djr.retrofit2ee.json.MapperFeatureConfig;
+import org.djr.retrofit2ee.json.RetrofitJson;
+import org.djr.retrofit2ee.json.JsonRetrofitProducer;
+import org.djr.retrofit2ee.json.RetrofitJsonConfig;
+import org.djr.retrofit2ee.json.SerializationFeatureConfig;
 import org.jglue.cdiunit.AdditionalClasses;
 import org.jglue.cdiunit.CdiRunner;
 import org.junit.Test;
@@ -20,8 +32,16 @@ import static org.junit.Assert.assertNotNull;
 public class Retrofit2EETest {
 	private static Logger log = LoggerFactory.getLogger(Retrofit2EETest.class);
 
-	@Retrofit2EEJSON(captureTrafficLogsPropertyName = "Retrofit2EETest.enableTrafficLogging",
+	@RetrofitJsonConfig(captureTrafficLogsPropertyName = "Retrofit2EETest.enableTrafficLogging",
 			baseUrlPropertyName = "Retrofit2EETest.baseUrlPropertyName")
+	@JacksonModule(jacksonModules = {com.fasterxml.jackson.datatype.jsr310.JavaTimeModule.class})
+	@JacksonMapperFeature(features = {
+			@MapperFeatureConfig(feature = MapperFeature.REQUIRE_SETTERS_FOR_GETTERS, value = false),
+			@MapperFeatureConfig(feature = MapperFeature.AUTO_DETECT_GETTERS, value = true)})
+	@JacksonSerializationFeature(features = {
+			@SerializationFeatureConfig(feature = SerializationFeature.INDENT_OUTPUT, value = true)})
+	@JacksonDeserializationFeature(features = {
+			@DeserializationFeatureConfig(feature = DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, value = false)})
 	@Inject
 	@RetrofitJson
 	private Retrofit retrofitJson;
