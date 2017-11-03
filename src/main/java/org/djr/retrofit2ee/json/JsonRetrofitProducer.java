@@ -51,7 +51,17 @@ public class JsonRetrofitProducer implements RetrofitProducer {
 		JacksonSerializationFeature serializationFeature = injectionPoint.getAnnotated().getAnnotation(JacksonSerializationFeature.class);
 		if (null != serializationFeature) {
 			objectMapper = getObjectMapper(objectMapper);
-			configureDeserializationFeaturesForObjectMapper(serializationFeature, objectMapper);
+			configureSerializationFeaturesForObjectMapper(serializationFeature, objectMapper);
+		}
+		JacksonJsonParserFeature jsonParserFeature = injectionPoint.getAnnotated().getAnnotation(JacksonJsonParserFeature.class);
+		if (null != jsonParserFeature) {
+			objectMapper = getObjectMapper(objectMapper);
+			configureJsonParserFeaturesForObjectMapper(jsonParserFeature, objectMapper);
+		}
+		JacksonJsonGeneratorFeature jsonGeneratorFeature = injectionPoint.getAnnotated().getAnnotation(JacksonJsonGeneratorFeature.class);
+		if (null != jsonGeneratorFeature) {
+			objectMapper = getObjectMapper(objectMapper);
+			configureJsonGeneratorFeaturesForObjectMapper(jsonGeneratorFeature, objectMapper);
 		}
 		return objectMapper;
 	}
@@ -82,13 +92,26 @@ public class JsonRetrofitProducer implements RetrofitProducer {
 		}
 	}
 
-	private void configureDeserializationFeaturesForObjectMapper(JacksonSerializationFeature serializationFeature, ObjectMapper objectMapper) {
+	private void configureSerializationFeaturesForObjectMapper(JacksonSerializationFeature serializationFeature, ObjectMapper objectMapper) {
 		for (SerializationFeatureConfig config : serializationFeature.features()) {
 			objectMapper.configure(config.feature(), config.value());
 		}
 	}
 
-	public Retrofit getTransport(ObjectMapper objectMapper, String baseUrl, boolean enableTrafficLogging) {
+	private void configureJsonParserFeaturesForObjectMapper(JacksonJsonParserFeature parserFeature, ObjectMapper objectMapper) {
+		for (JsonParserConfig config : parserFeature.features()) {
+			objectMapper.configure(config.feature(), config.value());
+		}
+	}
+
+	private void configureJsonGeneratorFeaturesForObjectMapper(JacksonJsonGeneratorFeature parserFeature, ObjectMapper objectMapper) {
+		for (JsonGeneratorConfig config : parserFeature.features()) {
+			objectMapper.configure(config.feature(), config.value());
+		}
+	}
+
+
+	private Retrofit getTransport(ObjectMapper objectMapper, String baseUrl, boolean enableTrafficLogging) {
 		log.debug("getTransport() baseUrl:{}, enableTrafficLogging:{}", baseUrl, enableTrafficLogging);
 		OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 		setLoggingInterceptor(enableTrafficLogging, httpClient);
