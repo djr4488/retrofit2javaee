@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.djr.retrofit2ee.RetrofitProducer;
+import org.djr.retrofit2ee.RetrofitProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import retrofit2.Retrofit;
@@ -12,21 +13,27 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
+import javax.inject.Inject;
+import java.util.Properties;
 
 public class JsonRetrofitProducer implements RetrofitProducer {
 	private static Logger log = LoggerFactory.getLogger(JsonRetrofitProducer.class);
+	@Inject
+	@RetrofitProperties
+	private Properties properties;
 
 	@Produces
 	@RetrofitJson
 	public Retrofit getClient(InjectionPoint injectionPoint)
 	throws NoSuchFieldException, InstantiationException, IllegalAccessException {
-		ObjectMapper objectMapper = null;
 		RetrofitJsonConfig jsonClientConfig = injectionPoint.getAnnotated().getAnnotation(RetrofitJsonConfig.class);
+		log.debug("getClient() injecting retrofit json client with annotation:{}", jsonClientConfig);
+		ObjectMapper objectMapper = null;
 		String baseUrlPropertyName = jsonClientConfig.baseUrlPropertyName();
 		String captureTrafficLogsPropertyName = jsonClientConfig.captureTrafficLogsPropertyName();
-		String baseUrl = System.getProperties().getProperty(baseUrlPropertyName);
+		String baseUrl = properties.getProperty(baseUrlPropertyName);
 		Boolean enableTrafficLogging =
-				Boolean.parseBoolean(System.getProperties().getProperty(captureTrafficLogsPropertyName, "FALSE"));
+				Boolean.parseBoolean(properties.getProperty(captureTrafficLogsPropertyName, "FALSE"));
 		objectMapper = configureJackson(injectionPoint, objectMapper);
 		return getTransport(objectMapper, baseUrl, enableTrafficLogging);
 	}
