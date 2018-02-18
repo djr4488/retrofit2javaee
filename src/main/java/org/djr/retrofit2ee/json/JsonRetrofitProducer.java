@@ -26,7 +26,7 @@ public class JsonRetrofitProducer implements RetrofitProducer {
 	@RetrofitJson
 	public Retrofit getClient(InjectionPoint injectionPoint)
 	throws NoSuchFieldException, InstantiationException, IllegalAccessException {
-		RetrofitJsonConfig jsonClientConfig = injectionPoint.getAnnotated().getAnnotation(RetrofitJsonConfig.class);
+		RetrofitJson jsonClientConfig = injectionPoint.getAnnotated().getAnnotation(RetrofitJson.class);
 		log.debug("getClient() injecting retrofit json client with annotation:{}", jsonClientConfig);
 		ObjectMapper objectMapper = null;
 		String baseUrlPropertyName = jsonClientConfig.baseUrlPropertyName();

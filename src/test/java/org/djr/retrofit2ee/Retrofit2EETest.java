@@ -21,35 +21,40 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import retrofit2.Retrofit;
 
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 import java.io.IOException;
+import java.util.Properties;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(CdiRunner.class)
+@AdditionalClasses({ JsonRetrofitProducer.class, RetrofitProducer.class })
 public class Retrofit2EETest {
-//	private static Logger log = LoggerFactory.getLogger(Retrofit2EETest.class);
-//
-//	@RetrofitJsonConfig(captureTrafficLogsPropertyName = "Retrofit2EETest.enableTrafficLogging",
-//			baseUrlPropertyName = "Retrofit2EETest.baseUrlPropertyName")
-//	@JacksonModule(jacksonModules = {com.fasterxml.jackson.datatype.jsr310.JavaTimeModule.class})
-//	@JacksonMapperFeature(features = {
-//			@MapperFeatureConfig(feature = MapperFeature.REQUIRE_SETTERS_FOR_GETTERS, value = false),
-//			@MapperFeatureConfig(feature = MapperFeature.AUTO_DETECT_GETTERS, value = true)})
-//	@JacksonSerializationFeature(features = {
-//			@SerializationFeatureConfig(feature = SerializationFeature.INDENT_OUTPUT, value = true)})
-//	@JacksonDeserializationFeature(features = {
-//			@DeserializationFeatureConfig(feature = DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, value = false)})
-//	@Inject
-//	@RetrofitJson
-//	private Retrofit retrofitJson;
-//
-//	public Retrofit2EETest() {
-//		System.setProperty("Retrofit2EETest.enableTrafficLogging", "TRUE");
-//		System.setProperty("Retrofit2EETest.baseUrlPropertyName", "https://api.darksky.net/");
-//	}
+	private static Logger log = LoggerFactory.getLogger(Retrofit2EETest.class);
+
+	@JacksonModule(jacksonModules = {com.fasterxml.jackson.datatype.jsr310.JavaTimeModule.class})
+	@JacksonMapperFeature(features = {
+			@MapperFeatureConfig(feature = MapperFeature.REQUIRE_SETTERS_FOR_GETTERS, value = false),
+			@MapperFeatureConfig(feature = MapperFeature.AUTO_DETECT_GETTERS, value = true)})
+	@JacksonSerializationFeature(features = {
+			@SerializationFeatureConfig(feature = SerializationFeature.INDENT_OUTPUT, value = true)})
+	@JacksonDeserializationFeature(features = {
+			@DeserializationFeatureConfig(feature = DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, value = false)})
+	@Inject
+	@RetrofitJson(captureTrafficLogsPropertyName = "Retrofit2EETest.enableTrafficLogging",
+			baseUrlPropertyName = "Retrofit2EETest.baseUrlPropertyName")
+	private Retrofit retrofitJson;
+	@Produces
+	@RetrofitProperties
+	Properties properties = new Properties();
+
+	public Retrofit2EETest() {
+		properties.setProperty("Retrofit2EETest.enableTrafficLogging", "TRUE");
+		properties.setProperty("Retrofit2EETest.baseUrlPropertyName", "https://api.darksky.net/");
+	}
 
 	@Test
 	public void testPlaceHolder() {
@@ -57,18 +62,18 @@ public class Retrofit2EETest {
 	}
 
 
-//	@Test
-//	public void testDarkskyClientNotNull() {
-//		assertNotNull(retrofitJson);
-//	}
-//
-//	@Test
-//	public void testDarkskyClient()
-//	throws IOException {
-//		DarkskyClient client = retrofitJson.create(DarkskyClient.class);
-//		assertNotNull(client);
-//		DarkskyResponse darkskyResponse = client.getForecast("<your api key here>", "38.8814",
-//				"-94.8191", "en", "us", "cst").execute().body();
-//		log.debug("testDarkskyClient() darkskyResponse:{}", darkskyResponse);
-//	}
+	@Test
+	public void testDarkskyClientNotNull() {
+		assertNotNull(retrofitJson);
+	}
+
+	@Test
+	public void testDarkskyClient()
+	throws IOException {
+		DarkskyClient client = retrofitJson.create(DarkskyClient.class);
+		assertNotNull(client);
+		DarkskyResponse darkskyResponse = client.getForecast("your api key placed here", "38.8814",
+				"-94.8191", "en", "us", "cst").execute().body();
+		log.debug("testDarkskyClient() darkskyResponse:{}", darkskyResponse);
+	}
 }
