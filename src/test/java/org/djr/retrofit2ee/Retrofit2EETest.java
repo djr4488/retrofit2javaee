@@ -72,7 +72,7 @@ public class Retrofit2EETest {
 	throws IOException {
 		DarkskyClient client = retrofitJson.create(DarkskyClient.class);
 		assertNotNull(client);
-		DarkskyResponse darkskyResponse = client.getForecast("your api key placed here", "38.8814",
+		DarkskyResponse darkskyResponse = client.getForecast("your api key", "38.8814",
 				"-94.8191", "en", "us", "cst").execute().body();
 		log.debug("testDarkskyClient() darkskyResponse:{}", darkskyResponse);
 	}
