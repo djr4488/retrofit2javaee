@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Properties;
 
+import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -93,5 +94,7 @@ public class Retrofit2EETest {
         assertNotNull(client);
         ZippopotamusResponse response = client.getZipInfo("us", "90210").execute().body();
         log.debug("testZippopotamusClient() response:{}", response);
+        assertNotNull(response);
+        assertEquals("90210", response.getPostCode());
     }
 }
