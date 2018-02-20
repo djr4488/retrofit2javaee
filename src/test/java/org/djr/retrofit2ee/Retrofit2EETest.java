@@ -3,16 +3,11 @@ package org.djr.retrofit2ee;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.djr.retrofit2ee.json.DeserializationFeatureConfig;
-import org.djr.retrofit2ee.json.JacksonDeserializationFeature;
-import org.djr.retrofit2ee.json.JacksonMapperFeature;
-import org.djr.retrofit2ee.json.JacksonModule;
-import org.djr.retrofit2ee.json.JacksonSerializationFeature;
-import org.djr.retrofit2ee.json.MapperFeatureConfig;
-import org.djr.retrofit2ee.json.RetrofitJson;
-import org.djr.retrofit2ee.json.JsonRetrofitProducer;
-import org.djr.retrofit2ee.json.RetrofitJsonConfig;
-import org.djr.retrofit2ee.json.SerializationFeatureConfig;
+import org.djr.retrofit2ee.json.*;
+import org.djr.retrofit2ee.xml.FreeGeoIPClient;
+import org.djr.retrofit2ee.xml.Response;
+import org.djr.retrofit2ee.xml.RetrofitXml;
+import org.djr.retrofit2ee.xml.XmlRetrofitProducer;
 import org.jglue.cdiunit.AdditionalClasses;
 import org.jglue.cdiunit.CdiRunner;
 import org.junit.Test;
@@ -32,7 +27,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(CdiRunner.class)
-@AdditionalClasses({JsonRetrofitProducer.class, RetrofitProducer.class})
+@AdditionalClasses({XmlRetrofitProducer.class, JsonRetrofitProducer.class, RetrofitProducer.class})
 public class Retrofit2EETest {
     private static Logger log = LoggerFactory.getLogger(Retrofit2EETest.class);
 
@@ -45,16 +40,24 @@ public class Retrofit2EETest {
     @JacksonDeserializationFeature(features = {
             @DeserializationFeatureConfig(feature = DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, value = false)})
     @Inject
-    @RetrofitJson(captureTrafficLogsPropertyName = "Retrofit2EETest.enableTrafficLogging",
-            baseUrlPropertyName = "Retrofit2EETest.baseUrlPropertyName")
+    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.enableTrafficLogging",
+            baseUrlPropertyName = "JSON.baseUrlPropertyName")
     private Retrofit retrofitJson;
+
+    @Inject
+    @RetrofitXml(captureTrafficLogsPropertyName = "XML.enableTrafficLogging",
+            baseUrlPropertyName = "XML.baseUrlPropertyName")
+    private Retrofit retrofitXml;
+
     @Produces
     @RetrofitProperties
     Properties properties = new Properties();
 
     public Retrofit2EETest() {
-        properties.setProperty("Retrofit2EETest.enableTrafficLogging", "TRUE");
-        properties.setProperty("Retrofit2EETest.baseUrlPropertyName", "http://api.zippopotam.us/");
+        properties.setProperty("JSON.enableTrafficLogging", "TRUE");
+        properties.setProperty("JSON.baseUrlPropertyName", "http://api.zippopotam.us/");
+        properties.setProperty("XML.enableTrafficLogging", "TRUE");
+        properties.setProperty("XML.baseUrlPropertyName", "http://freegeoip.net/");
     }
 
     @Test
@@ -68,33 +71,24 @@ public class Retrofit2EETest {
         assertNotNull(retrofitJson);
     }
 
-    /**
-     * JSON returned
-     *
-     *
-     {
-        "post code": "90210",
-        "country": "United States",
-        "country abbreviation": "US",
-        "places": [
-        {
-            "place name": "Beverly Hills",
-            "longitude": "-118.4065",
-            "state": "California",
-            "state abbreviation": "CA",
-            "latitude": "34.0901"
-        }
-        ]
-     }
-     */
     @Test
     public void testZippopotamusClient()
-            throws IOException {
+    throws IOException {
         ZippopotamusClient client = retrofitJson.create(ZippopotamusClient.class);
         assertNotNull(client);
         ZippopotamusResponse response = client.getZipInfo("us", "90210").execute().body();
         log.debug("testZippopotamusClient() response:{}", response);
         assertNotNull(response);
         assertEquals("90210", response.getPostCode());
+    }
+
+    @Test
+    public void testFreeGeoIPClient()
+    throws IOException {
+        FreeGeoIPClient client = retrofitXml.create(FreeGeoIPClient.class);
+        assertNotNull(client);
+        Response response = client.getResponse("xml").execute().body();
+        log.debug("testFreeGeoIPClient() response:{}", response);
+        assertNotNull(response);
     }
 }
