@@ -72,7 +72,7 @@ public class ProtobufTest {
     throws IOException {
         BehaviorDelegate<ProtoGeoIPClient> behaviorDelegate = mockRetrofit.create(ProtoGeoIPClient.class);
         MockProtoGeoIPClientFailure mockClient = new MockProtoGeoIPClientFailure(behaviorDelegate);
-        Call<ResponseProtos.Response> response = mockClient.getResponse("xml");
+        Call<ResponseProtos.Response> response = mockClient.getResponse("proto");
         retrofit2.Response<ResponseProtos.Response> resp = response.execute();
         assertFalse("expected false for successful", resp.isSuccessful());
         assertEquals(404, resp.code());
