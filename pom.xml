@@ -12,6 +12,7 @@
     <properties>
         <retrofit.version>2.3.0</retrofit.version>
         <okhttp3.version>3.8.1</okhttp3.version>
+        <wire.version>2.2.0</wire.version>
     </properties>
 
     <dependencies>
@@ -101,6 +102,24 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-gson</artifactId>
+            <version>${retrofit.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-moshi</artifactId>
+            <version>${retrofit.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-wire</artifactId>
+            <version>${retrofit.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
             <version>${okhttp3.version}</version>
@@ -118,6 +137,16 @@
             <version>2.8.6</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- protobuf -->
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.5.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- wire -->
 
         <!-- testing -->
         <dependency>
@@ -175,6 +204,28 @@
             <version>${retrofit.version}</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.squareup.wire</groupId>
+                <artifactId>wire-maven-plugin</artifactId>
+                <version>${wire.version}</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate-sources</goal>
+                        </goals>
+                        <configuration>
+                            <protoFiles>
+                                <protoFile>Response.proto</protoFile>
+                            </protoFiles>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

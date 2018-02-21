@@ -3,14 +3,13 @@ package org.djr.retrofit2ee.xml;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.djr.retrofit2ee.RetrofitProperties;
+import org.djr.retrofit2ee.RetrofitPropertyLoader;
 import org.djr.retrofit2ee.protobuf.ProtobufRetrofitProducer;
-import org.djr.retrofit2ee.protobuf.RetrofitProtobuf;
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import retrofit2.Retrofit;
-import retrofit2.converter.protobuf.ProtoConverterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 import javax.enterprise.inject.Produces;
