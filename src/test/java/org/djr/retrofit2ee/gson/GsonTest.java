@@ -48,6 +48,8 @@ public class GsonTest {
     @Before
     public void setup() {
         networkBehavior = NetworkBehavior.create();
+        networkBehavior.setErrorPercent(0);
+        networkBehavior.setFailurePercent(0);
         mockRetrofit = new MockRetrofit.Builder(retrofitGson)
                 .networkBehavior(networkBehavior)
                 .build();

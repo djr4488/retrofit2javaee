@@ -48,6 +48,8 @@ public class ProtobufTest {
     @Before
     public void setup() {
         networkBehavior = NetworkBehavior.create();
+        networkBehavior.setErrorPercent(0);
+        networkBehavior.setFailurePercent(0);
         mockRetrofit = new MockRetrofit.Builder(retrofitProto)
                 .networkBehavior(networkBehavior)
                 .build();

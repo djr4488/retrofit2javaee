@@ -48,6 +48,8 @@ public class XmlTest {
     @Before
     public void setup() {
         networkBehavior = NetworkBehavior.create();
+        networkBehavior.setErrorPercent(0);
+        networkBehavior.setFailurePercent(0);
         mockRetrofit = new MockRetrofit.Builder(retrofitXml)
                 .networkBehavior(networkBehavior)
                 .build();
