@@ -1,5 +1,6 @@
-package org.djr.retrofit2ee;
+package org.djr.retrofit2ee.protobuf;
 
+import javax.enterprise.util.Nonbinding;
 import javax.inject.Qualifier;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -8,8 +9,6 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Created by djr4488 on 11/9/17.
- *
  * Copyright 11-9-2017 Danny Rucker
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,5 +26,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Qualifier
 @Retention(RUNTIME)
 @Target({METHOD, FIELD, PARAMETER, TYPE})
-public @interface RetrofitProperties {
+public @interface RetrofitProtobuf {
+    @Nonbinding String captureTrafficLogsPropertyName() default "";
+    @Nonbinding String baseUrlPropertyName() default "";
 }

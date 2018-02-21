@@ -6,6 +6,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.djr.retrofit2ee.RetrofitProducer;
 import org.djr.retrofit2ee.RetrofitProperties;
+import org.djr.retrofit2ee.RetrofitPropertyLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import retrofit2.Retrofit;

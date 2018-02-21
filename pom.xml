@@ -9,6 +9,12 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+    <properties>
+        <retrofit.version>2.3.0</retrofit.version>
+        <okhttp3.version>3.8.1</okhttp3.version>
+        <wire.version>2.2.0</wire.version>
+    </properties>
+
     <dependencies>
         <!-- java ee -->
         <dependency>
@@ -80,7 +86,49 @@
         <dependency>
             <groupId>com.squareup.retrofit2</groupId>
             <artifactId>converter-jackson</artifactId>
-            <version>2.3.0</version>
+            <version>${retrofit.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-protobuf</artifactId>
+            <version>${retrofit.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-simplexml</artifactId>
+            <version>${retrofit.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-gson</artifactId>
+            <version>${retrofit.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-moshi</artifactId>
+            <version>${retrofit.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-wire</artifactId>
+            <version>${retrofit.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhttp3.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>logging-interceptor</artifactId>
+            <version>${okhttp3.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -89,24 +137,16 @@
             <version>2.8.6</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- protobuf -->
         <dependency>
-            <groupId>com.squareup.retrofit2</groupId>
-            <artifactId>converter-simplexml</artifactId>
-            <version>2.3.0</version>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.5.1</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>3.8.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>logging-interceptor</artifactId>
-            <version>3.8.1</version>
-            <scope>compile</scope>
-        </dependency>
+
+        <!-- wire -->
 
         <!-- testing -->
         <dependency>
@@ -161,9 +201,37 @@
         <dependency>
             <groupId>com.squareup.retrofit2</groupId>
             <artifactId>retrofit-mock</artifactId>
-            <version>2.3.0</version>
+            <version>${retrofit.version}</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.squareup.wire</groupId>
+                <artifactId>wire-maven-plugin</artifactId>
+                <version>${wire.version}</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate-sources</goal>
+                        </goals>
+                        <configuration>
+                            <protoSourceDirectory>
+                                D:\development\projects\retrofit2javaee\src\test\java\org\djr\retrofit2ee\wire\proto
+                            </protoSourceDirectory>
+                            <generatedSourceDirectory>
+                                D:\development\projects\retrofit2javaee\src\test\java\org\djr\retrofit2ee\wire
+                            </generatedSourceDirectory>
+                            <protoFiles>
+                                <protoFile>Response.proto</protoFile>
+                            </protoFiles>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

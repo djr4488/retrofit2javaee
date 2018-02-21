@@ -3,18 +3,18 @@ package org.djr.retrofit2ee;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.djr.retrofit2ee.json.DeserializationFeatureConfig;
-import org.djr.retrofit2ee.json.JacksonDeserializationFeature;
-import org.djr.retrofit2ee.json.JacksonMapperFeature;
-import org.djr.retrofit2ee.json.JacksonModule;
-import org.djr.retrofit2ee.json.JacksonSerializationFeature;
-import org.djr.retrofit2ee.json.MapperFeatureConfig;
-import org.djr.retrofit2ee.json.RetrofitJson;
-import org.djr.retrofit2ee.json.JsonRetrofitProducer;
-import org.djr.retrofit2ee.json.RetrofitJsonConfig;
-import org.djr.retrofit2ee.json.SerializationFeatureConfig;
+import org.djr.retrofit2ee.gson.GsonRetrofitProducer;
+import org.djr.retrofit2ee.gson.RetrofitGson;
+import org.djr.retrofit2ee.json.*;
+import org.djr.retrofit2ee.moshi.MoshiRetrofitProducer;
+import org.djr.retrofit2ee.moshi.RetrofitMoshi;
+import org.djr.retrofit2ee.protobuf.ProtobufRetrofitProducer;
+import org.djr.retrofit2ee.protobuf.RetrofitProtobuf;
+import org.djr.retrofit2ee.xml.RetrofitXml;
+import org.djr.retrofit2ee.xml.XmlRetrofitProducer;
 import org.jglue.cdiunit.AdditionalClasses;
 import org.jglue.cdiunit.CdiRunner;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -29,10 +29,10 @@ import java.util.Properties;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(CdiRunner.class)
-@AdditionalClasses({JsonRetrofitProducer.class, RetrofitProducer.class})
+@AdditionalClasses({GsonRetrofitProducer.class, ProtobufRetrofitProducer.class, XmlRetrofitProducer.class,
+        JsonRetrofitProducer.class, RetrofitProducer.class, MoshiRetrofitProducer.class})
 public class Retrofit2EETest {
     private static Logger log = LoggerFactory.getLogger(Retrofit2EETest.class);
 
@@ -45,56 +45,103 @@ public class Retrofit2EETest {
     @JacksonDeserializationFeature(features = {
             @DeserializationFeatureConfig(feature = DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, value = false)})
     @Inject
-    @RetrofitJson(captureTrafficLogsPropertyName = "Retrofit2EETest.enableTrafficLogging",
-            baseUrlPropertyName = "Retrofit2EETest.baseUrlPropertyName")
+    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.enableTrafficLogging",
+            baseUrlPropertyName = "JSON.baseUrlPropertyName")
     private Retrofit retrofitJson;
+
+    @Inject
+    @RetrofitXml(captureTrafficLogsPropertyName = "XML.enableTrafficLogging",
+            baseUrlPropertyName = "XML.baseUrlPropertyName")
+    private Retrofit retrofitXml;
+
+    @Inject
+    @RetrofitProtobuf(captureTrafficLogsPropertyName = "ProtoBuf.enableTrafficLogging",
+            baseUrlPropertyName = "ProtoBuf.baseUrlPropertyName")
+    private Retrofit retrofitProtobuf;
+
+    @Inject
+    @RetrofitGson(captureTrafficLogsPropertyName = "ProtoBuf.enableTrafficLogging",
+            baseUrlPropertyName = "ProtoBuf.baseUrlPropertyName")
+    private Retrofit retrofitGson;
+
+    @Inject
+    @RetrofitMoshi(captureTrafficLogsPropertyName = "ProtoBuf.enableTrafficLogging",
+            baseUrlPropertyName = "ProtoBuf.baseUrlPropertyName")
+    private Retrofit retrofitMoshi;
+
     @Produces
     @RetrofitProperties
     Properties properties = new Properties();
 
     public Retrofit2EETest() {
-        properties.setProperty("Retrofit2EETest.enableTrafficLogging", "TRUE");
-        properties.setProperty("Retrofit2EETest.baseUrlPropertyName", "http://api.zippopotam.us/");
+        properties.setProperty("JSON.enableTrafficLogging", "TRUE");
+        properties.setProperty("JSON.baseUrlPropertyName", "http://api.zippopotam.us/");
+        properties.setProperty("XML.enableTrafficLogging", "TRUE");
+        properties.setProperty("XML.baseUrlPropertyName", "http://freegeoip.net/");
+        properties.setProperty("ProtoBuf.enableTrafficLogging", "TRUE");
+        properties.setProperty("ProtoBuf.baseUrlPropertyName", "http://freegeoip.net/");
     }
 
     @Test
-    public void testPlaceHolder() {
-        assertTrue(true);
-    }
-
-
-    @Test
-    public void testDarkskyClientNotNull() {
+    public void testClientNotNull() {
         assertNotNull(retrofitJson);
+        assertNotNull(retrofitXml);
+        assertNotNull(retrofitProtobuf);
     }
 
-    /**
-     * JSON returned
-     *
-     *
-     {
-        "post code": "90210",
-        "country": "United States",
-        "country abbreviation": "US",
-        "places": [
-        {
-            "place name": "Beverly Hills",
-            "longitude": "-118.4065",
-            "state": "California",
-            "state abbreviation": "CA",
-            "latitude": "34.0901"
-        }
-        ]
-     }
-     */
     @Test
+    @Ignore
     public void testZippopotamusClient()
-            throws IOException {
+    throws IOException {
         ZippopotamusClient client = retrofitJson.create(ZippopotamusClient.class);
         assertNotNull(client);
         ZippopotamusResponse response = client.getZipInfo("us", "90210").execute().body();
         log.debug("testZippopotamusClient() response:{}", response);
         assertNotNull(response);
         assertEquals("90210", response.getPostCode());
+    }
+
+    @Test
+    @Ignore
+    public void testFreeGeoIPClientXml()
+    throws IOException {
+        FreeGeoIPClient client = retrofitXml.create(FreeGeoIPClient.class);
+        assertNotNull(client);
+        Response response = client.getResponse("xml").execute().body();
+        log.debug("testFreeGeoIPClient() response:{}", response);
+        assertNotNull(response);
+    }
+
+    @Test
+    @Ignore
+    public void testFreeGeoIPClientProtobuf()
+    throws IOException {
+        FreeGeoIPClient client = retrofitXml.create(FreeGeoIPClient.class);
+        assertNotNull(client);
+        Response response = client.getResponse("protobuf").execute().body();
+        log.debug("testFreeGeoIPClient() response:{}", response);
+        assertNotNull(response);
+    }
+
+    @Test
+    @Ignore
+    public void testFreeGeoIPClientGson()
+    throws IOException {
+        FreeGeoIPClient client = retrofitGson.create(FreeGeoIPClient.class);
+        assertNotNull(client);
+        Response response = client.getResponse("json").execute().body();
+        log.debug("testFreeGeoIPClientGson() response:{}", response);
+        assertNotNull(response);
+    }
+
+    @Test
+    @Ignore
+    public void testFreeGeoIPClientMoshi()
+            throws IOException {
+        FreeGeoIPClient client = retrofitMoshi.create(FreeGeoIPClient.class);
+        assertNotNull(client);
+        Response response = client.getResponse("json").execute().body();
+        log.debug("testFreeGeoIPClientMoshi() response:{}", response);
+        assertNotNull(response);
     }
 }

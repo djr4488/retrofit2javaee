@@ -1,4 +1,4 @@
-package org.djr.retrofit2ee;
+package org.djr.retrofit2ee.json;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

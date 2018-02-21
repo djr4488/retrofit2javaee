@@ -1,0 +1,17 @@
+syntax = "proto2";
+package retrofit2ee;
+option java_package = "org.djr.retrofit2e.wire";
+option java_outer_classname = "ResponseProto";
+message Response {
+    optional string ip = 1;
+    optional string countryCode = 2;
+    optional string countryName = 3;
+    optional string regionCode = 4;
+    optional string regionName = 5;
+    optional string city = 6;
+    optional string zipCode = 7;
+    optional string timeZone = 8;
+    optional string latitude = 9;
+    optional string longitude = 10;
+    optional string metroCode = 11;
+}
