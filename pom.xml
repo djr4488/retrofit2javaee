@@ -8,12 +8,24 @@
     <artifactId>retrofitee-core</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
+         
+    <name>RetrofitEE</name>     
+    <description>A declarative retrofit library for Java EE</description>
+    <url>https://github.com/djr4488/retrofit2javaee</url>     
+         
     <properties>
         <retrofit.version>2.3.0</retrofit.version>
         <okhttp3.version>3.8.1</okhttp3.version>
         <wire.version>2.2.0</wire.version>
     </properties>
+         
+    <licenses>
+        <license>
+           <name>Apache License, Version 2.0</name>
+           <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+           <distribution>repo</distribution>
+        </license>
+    </licenses>    
 
     <dependencies>
         <!-- java ee -->
