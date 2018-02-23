@@ -26,6 +26,18 @@
            <distribution>repo</distribution>
         </license>
     </licenses>    
+    
+    <scm>
+        <url>http://github.com/djr4488/retrofit2javaee</url>
+        <connection>scm:git:git://github.com/djr4488/retrofit2javaee.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/djr4488/retrofit2javaee.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>http://github.com/djr4488/retrofit2javaee/issues</url>
+    </issueManagement>     
 
     <dependencies>
         <!-- java ee -->
