@@ -90,7 +90,6 @@ public class Retrofit2EETest {
     }
 
     @Test
-    @Ignore
     public void testZippopotamusClient()
     throws IOException {
         ZippopotamusClient client = retrofitJson.create(ZippopotamusClient.class);

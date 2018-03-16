@@ -141,15 +141,15 @@ public class JsonRetrofitProducer implements RetrofitProducer {
 		Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
 				.baseUrl(baseUrl);
 		retrofitBuilder.client(httpClient.build());
-		if (null != objectMapper) {
-			setConverterFactory(objectMapper, retrofitBuilder);
-		}
+		setConverterFactory(objectMapper, retrofitBuilder);
 		return retrofitBuilder.build();
 	}
 
 	private void setConverterFactory(ObjectMapper objectMapper, Retrofit.Builder retrofitBuilder) {
 		if (null != objectMapper) {
 			retrofitBuilder.addConverterFactory(JacksonConverterFactory.create(objectMapper))  ;
+		} else {
+			retrofitBuilder.addConverterFactory(JacksonConverterFactory.create());
 		}
 	}
 

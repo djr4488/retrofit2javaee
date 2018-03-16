@@ -1,5 +1,7 @@
 package org.djr.retrofit2ee.json;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -43,6 +45,21 @@ public class JsonTest {
     @RetrofitJson(captureTrafficLogsPropertyName = "JSON.enableTrafficLogging",
             baseUrlPropertyName = "JSON.baseUrlPropertyName")
     private Retrofit retrofitJson;
+
+    @JacksonJsonParserFeature(features = {
+            @JsonParserConfig(feature = JsonParser.Feature.ALLOW_NUMERIC_LEADING_ZEROS, value = true)})
+    @JacksonJsonGeneratorFeature(features = {
+            @JsonGeneratorConfig(feature = JsonGenerator.Feature.AUTO_CLOSE_JSON_CONTENT, value = true)})
+    @Inject
+    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.enableTrafficLogging",
+            baseUrlPropertyName = "JSON.baseUrlPropertyName")
+    private Retrofit retrofitJson2;
+
+    @Inject
+    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.noTrafficLogging",
+            baseUrlPropertyName = "JSON.baseUrlPropertyName")
+    private Retrofit retrofitJson3;
+
     @Produces
     @RetrofitProperties
     private Properties properties = new Properties();
@@ -53,6 +70,7 @@ public class JsonTest {
     public JsonTest() {
         properties.setProperty("JSON.enableTrafficLogging", "TRUE");
         properties.setProperty("JSON.baseUrlPropertyName", "http://freegeoip.net/");
+        properties.setProperty("JSON.noTrafficLogging", "FALSE");
     }
 
     @Before
