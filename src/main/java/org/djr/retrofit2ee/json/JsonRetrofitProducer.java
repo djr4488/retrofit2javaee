@@ -2,14 +2,16 @@ package org.djr.retrofit2ee.json;
 
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.reactivex.Scheduler;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import org.djr.retrofit2ee.RetrofitProducer;
-import org.djr.retrofit2ee.RetrofitProperties;
-import org.djr.retrofit2ee.RetrofitPropertyLoader;
+import org.djr.retrofit2ee.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import retrofit2.CallAdapter;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import javax.enterprise.inject.Produces;
@@ -51,7 +53,8 @@ public class JsonRetrofitProducer implements RetrofitProducer {
 		Boolean enableTrafficLogging =
 				Boolean.parseBoolean(properties.getProperty(captureTrafficLogsPropertyName, "FALSE"));
 		objectMapper = configureJackson(injectionPoint, objectMapper);
-		return getTransport(objectMapper, baseUrl, enableTrafficLogging);
+		return getTransport(objectMapper, baseUrl, enableTrafficLogging, jsonClientConfig.asyncAdapterType(),
+				jsonClientConfig.schedulerType(), jsonClientConfig.createAsync());
 	}
 
 	private ObjectMapper configureJackson(InjectionPoint injectionPoint, ObjectMapper objectMapper)
@@ -134,7 +137,8 @@ public class JsonRetrofitProducer implements RetrofitProducer {
 	}
 
 
-	private Retrofit getTransport(ObjectMapper objectMapper, String baseUrl, boolean enableTrafficLogging) {
+	private Retrofit getTransport(ObjectMapper objectMapper, String baseUrl, boolean enableTrafficLogging,
+								  AsyncAdapterType asyncAdapterType, SchedulerType schedulerType, boolean createAsync) {
 		log.debug("getTransport() baseUrl:{}, enableTrafficLogging:{}", baseUrl, enableTrafficLogging);
 		OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 		setLoggingInterceptor(enableTrafficLogging, httpClient);
@@ -142,6 +146,7 @@ public class JsonRetrofitProducer implements RetrofitProducer {
 				.baseUrl(baseUrl);
 		retrofitBuilder.client(httpClient.build());
 		setConverterFactory(objectMapper, retrofitBuilder);
+		setAsyncAdapter(asyncAdapterType, schedulerType, retrofitBuilder, createAsync);
 		return retrofitBuilder.build();
 	}
 
@@ -159,5 +164,61 @@ public class JsonRetrofitProducer implements RetrofitProducer {
 			loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 			builder.addInterceptor(loggingInterceptor);
 		}
+	}
+
+	private Scheduler setScheduler(SchedulerType schedulerType) {
+		Scheduler scheduler = null;
+		switch(schedulerType) {
+			case COMPUTATION: {
+				scheduler = Schedulers.computation();
+				break;
+			}
+			case IO: {
+				scheduler = Schedulers.io();
+				break;
+			}
+			case NEW_THREAD: {
+				scheduler = Schedulers.newThread();
+				break;
+			}
+			case SINGLE: {
+				scheduler = Schedulers.single();
+				break;
+			}
+			case TRAMPOLINE: {
+				scheduler = Schedulers.trampoline();
+				break;
+			}
+			case NONE: {
+				log.trace("setScheduler() no scheduler selected");
+			}
+		}
+		return scheduler;
+	}
+
+	private void setAsyncAdapter(AsyncAdapterType asyncAdapterType, SchedulerType schedulerType, Retrofit.Builder retrofitBuilder,
+								 boolean createAsync) {
+		Scheduler scheduler = setScheduler(schedulerType);
+		CallAdapter.Factory factory;
+		switch (asyncAdapterType) {
+			case RXJAVA2:
+				factory = getRxJava2Factory(createAsync, scheduler);
+				retrofitBuilder.addCallAdapterFactory(factory);
+				break;
+			case NONE:
+				log.trace("setAsyncAdapter() not configured for async");
+		}
+	}
+
+	private CallAdapter.Factory getRxJava2Factory(boolean createAsync, Scheduler scheduler) {
+		CallAdapter.Factory factory;
+		if (null != scheduler) {
+            factory = RxJava2CallAdapterFactory.createWithScheduler(scheduler);
+        } else if (createAsync) {
+            factory = RxJava2CallAdapterFactory.createAsync();
+        } else {
+            factory = RxJava2CallAdapterFactory.create();
+        }
+		return factory;
 	}
 }

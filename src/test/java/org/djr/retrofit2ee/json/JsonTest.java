@@ -60,6 +60,62 @@ public class JsonTest {
             baseUrlPropertyName = "JSON.baseUrlPropertyName")
     private Retrofit retrofitJson3;
 
+    @Inject
+    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.noTrafficLogging",
+            baseUrlPropertyName = "JSON.baseUrlPropertyName",
+            asyncAdapterType = AsyncAdapterType.RXJAVA2,
+            schedulerType = SchedulerType.NONE,
+            createAsync = false)
+    private Retrofit rxJava2NoSchedulerCreate;
+
+    @Inject
+    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.noTrafficLogging",
+            baseUrlPropertyName = "JSON.baseUrlPropertyName",
+            asyncAdapterType = AsyncAdapterType.RXJAVA2,
+            schedulerType = SchedulerType.NONE,
+            createAsync = true)
+    private Retrofit rxJava2NoSchedulerCreateAsync;
+
+    @Inject
+    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.noTrafficLogging",
+            baseUrlPropertyName = "JSON.baseUrlPropertyName",
+            asyncAdapterType = AsyncAdapterType.RXJAVA2,
+            schedulerType = SchedulerType.COMPUTATION,
+            createAsync = false)
+    private Retrofit rxJava2ComputationScheduler;
+
+    @Inject
+    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.noTrafficLogging",
+            baseUrlPropertyName = "JSON.baseUrlPropertyName",
+            asyncAdapterType = AsyncAdapterType.RXJAVA2,
+            schedulerType = SchedulerType.IO,
+            createAsync = false)
+    private Retrofit rxJava2IOScheduler;
+
+    @Inject
+    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.noTrafficLogging",
+            baseUrlPropertyName = "JSON.baseUrlPropertyName",
+            asyncAdapterType = AsyncAdapterType.RXJAVA2,
+            schedulerType = SchedulerType.NEW_THREAD,
+            createAsync = false)
+    private Retrofit rxJava2NewThreadScheduler;
+
+    @Inject
+    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.noTrafficLogging",
+            baseUrlPropertyName = "JSON.baseUrlPropertyName",
+            asyncAdapterType = AsyncAdapterType.RXJAVA2,
+            schedulerType = SchedulerType.SINGLE,
+            createAsync = false)
+    private Retrofit rxJava2SingleScheduler;
+
+    @Inject
+    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.noTrafficLogging",
+            baseUrlPropertyName = "JSON.baseUrlPropertyName",
+            asyncAdapterType = AsyncAdapterType.RXJAVA2,
+            schedulerType = SchedulerType.TRAMPOLINE,
+            createAsync = false)
+    private Retrofit rxJava2TrampolineScheduler;
+
     @Produces
     @RetrofitProperties
     private Properties properties = new Properties();

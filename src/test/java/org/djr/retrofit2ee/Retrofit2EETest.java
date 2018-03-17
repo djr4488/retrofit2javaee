@@ -101,7 +101,6 @@ public class Retrofit2EETest {
     }
 
     @Test
-    @Ignore
     public void testFreeGeoIPClientXml()
     throws IOException {
         FreeGeoIPClient client = retrofitXml.create(FreeGeoIPClient.class);
