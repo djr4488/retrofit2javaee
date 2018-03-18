@@ -5,8 +5,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import org.djr.retrofit2ee.AsyncAdapterType;
 import org.djr.retrofit2ee.RetrofitProperties;
 import org.djr.retrofit2ee.SchedulerType;
-import org.simpleframework.xml.convert.AnnotationStrategy;
-import org.simpleframework.xml.core.Persister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import retrofit2.Retrofit;

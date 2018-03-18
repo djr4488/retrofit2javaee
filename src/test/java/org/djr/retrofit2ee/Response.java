@@ -7,11 +7,14 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Root(strict = false)
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
 public class Response {
     @Element(name = "IP", required = false)
     @Json(name = "ip")

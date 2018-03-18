@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.djr.retrofit2ee.gson.GsonRetrofitProducer;
 import org.djr.retrofit2ee.gson.RetrofitGson;
 import org.djr.retrofit2ee.jackson.*;
+import org.djr.retrofit2ee.jaxb.JaxBRetrofitProducer;
+import org.djr.retrofit2ee.jaxb.RetrofitJaxB;
 import org.djr.retrofit2ee.moshi.MoshiRetrofitProducer;
 import org.djr.retrofit2ee.moshi.RetrofitMoshi;
 import org.djr.retrofit2ee.protobuf.ProtobufRetrofitProducer;
@@ -32,7 +34,7 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(CdiRunner.class)
 @AdditionalClasses({GsonRetrofitProducer.class, ProtobufRetrofitProducer.class, XmlRetrofitProducer.class,
-        JsonRetrofitProducer.class, RetrofitProducer.class, MoshiRetrofitProducer.class})
+        JsonRetrofitProducer.class, RetrofitProducer.class, MoshiRetrofitProducer.class, JaxBRetrofitProducer.class})
 public class Retrofit2EETest {
     private static Logger log = LoggerFactory.getLogger(Retrofit2EETest.class);
 
@@ -69,6 +71,11 @@ public class Retrofit2EETest {
             baseUrlPropertyName = "ProtoBuf.baseUrlPropertyName")
     private Retrofit retrofitMoshi;
 
+    @Inject
+    @RetrofitJaxB(captureTrafficLogsPropertyName = "XML.enableTrafficLogging",
+            baseUrlPropertyName = "XML.baseUrlPropertyName")
+    private Retrofit retrofitJaxB;
+
     @Produces
     @RetrofitProperties
     Properties properties = new Properties();
@@ -87,6 +94,7 @@ public class Retrofit2EETest {
         assertNotNull(retrofitJson);
         assertNotNull(retrofitXml);
         assertNotNull(retrofitProtobuf);
+        assertNotNull(retrofitJaxB);
     }
 
     @Test
@@ -107,6 +115,16 @@ public class Retrofit2EETest {
         assertNotNull(client);
         Response response = client.getResponse("xml").execute().body();
         log.debug("testFreeGeoIPClient() response:{}", response);
+        assertNotNull(response);
+    }
+
+    @Test
+    public void testFreeGeoIPClientJaxB()
+            throws IOException {
+        FreeGeoIPClient client = retrofitJaxB.create(FreeGeoIPClient.class);
+        assertNotNull(client);
+        Response response = client.getResponse("xml").execute().body();
+        log.debug("testFreeGeoIPClient() JaxB response:{}", response);
         assertNotNull(response);
     }
 

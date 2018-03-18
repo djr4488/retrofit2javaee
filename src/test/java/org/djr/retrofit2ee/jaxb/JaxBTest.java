@@ -36,7 +36,7 @@ public class JaxBTest {
     @Inject
     @RetrofitJaxB(captureTrafficLogsPropertyName = "JaxB.enableTrafficLogging",
             baseUrlPropertyName = "JaxB.baseUrlPropertyName")
-    private Retrofit retrofitXml;
+    private Retrofit retrofitJaxB;
     @Produces
     @RetrofitProperties
     private Properties properties = new Properties();
@@ -54,7 +54,7 @@ public class JaxBTest {
         networkBehavior = NetworkBehavior.create();
         networkBehavior.setErrorPercent(0);
         networkBehavior.setFailurePercent(0);
-        mockRetrofit = new MockRetrofit.Builder(retrofitXml)
+        mockRetrofit = new MockRetrofit.Builder(retrofitJaxB)
                 .networkBehavior(networkBehavior)
                 .build();
     }
