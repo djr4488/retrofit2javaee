@@ -2,40 +2,49 @@ package org.djr.retrofit2ee.gson;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import org.djr.retrofit2ee.AdapterUtils;
+import org.djr.retrofit2ee.AsyncAdapterType;
 import org.djr.retrofit2ee.RetrofitProperties;
 import org.djr.retrofit2ee.RetrofitPropertyLoader;
+import org.djr.retrofit2ee.SchedulerType;
 import org.djr.retrofit2ee.protobuf.ProtobufRetrofitProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import javax.annotation.Resource;
+import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 import java.util.Properties;
 
 public class GsonRetrofitProducer {
-    private static Logger log = LoggerFactory.getLogger(ProtobufRetrofitProducer.class);
+    private static Logger log = LoggerFactory.getLogger(GsonRetrofitProducer.class);
     @Inject
     @RetrofitProperties
     private Properties properties;
+    @Resource(name = "RetrofitManagedExecutorService")
+    private ManagedExecutorService managedExecutorService;
 
     @Produces
     @RetrofitGson
     public Retrofit getClient(InjectionPoint injectionPoint)
             throws NoSuchFieldException, InstantiationException, IllegalAccessException {
-        RetrofitGson xmlClientConfig = injectionPoint.getAnnotated().getAnnotation(RetrofitGson.class);
-        log.debug("getClient() injecting retrofit xml client with annotation:{}", xmlClientConfig);
-        String baseUrlPropertyName = xmlClientConfig.baseUrlPropertyName();
-        String captureTrafficLogsPropertyName = xmlClientConfig.captureTrafficLogsPropertyName();
+        RetrofitGson gsonClientConfig = injectionPoint.getAnnotated().getAnnotation(RetrofitGson.class);
+        log.trace("getClient() injecting retrofit gson client with annotation:{}", gsonClientConfig);
+        String baseUrlPropertyName = gsonClientConfig.baseUrlPropertyName();
+        String captureTrafficLogsPropertyName = gsonClientConfig.captureTrafficLogsPropertyName();
         String baseUrl = properties.getProperty(baseUrlPropertyName);
         Boolean enableTrafficLogging =
                 Boolean.parseBoolean(properties.getProperty(captureTrafficLogsPropertyName, "FALSE"));
-        return getTransport(baseUrl, enableTrafficLogging);
+        return getTransport(baseUrl, enableTrafficLogging, gsonClientConfig.asyncAdapterType(), gsonClientConfig.schedulerType(),
+                gsonClientConfig.createAsync());
     }
 
-    private Retrofit getTransport(String baseUrl, boolean enableTrafficLogging) {
+    private Retrofit getTransport(String baseUrl, boolean enableTrafficLogging, AsyncAdapterType asyncAdapterType,
+                                  SchedulerType schedulerType, boolean createAsync) {
         log.debug("getTransport() baseUrl:{}, enableTrafficLogging:{}", baseUrl, enableTrafficLogging);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         setLoggingInterceptor(enableTrafficLogging, httpClient);
@@ -43,6 +52,7 @@ public class GsonRetrofitProducer {
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(baseUrl)
                 .client(httpClient.build());
+        AdapterUtils.setCallAdapter(asyncAdapterType, schedulerType, retrofitBuilder, createAsync, managedExecutorService);
         retrofitBuilder.client(httpClient.build());
         return retrofitBuilder.build();
     }

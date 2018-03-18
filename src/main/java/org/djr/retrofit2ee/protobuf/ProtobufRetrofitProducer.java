@@ -2,8 +2,10 @@ package org.djr.retrofit2ee.protobuf;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import org.djr.retrofit2ee.AsyncAdapterType;
 import org.djr.retrofit2ee.RetrofitProperties;
 import org.djr.retrofit2ee.RetrofitPropertyLoader;
+import org.djr.retrofit2ee.SchedulerType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import retrofit2.Retrofit;
@@ -31,10 +33,12 @@ public class ProtobufRetrofitProducer {
         String baseUrl = properties.getProperty(baseUrlPropertyName);
         Boolean enableTrafficLogging =
                 Boolean.parseBoolean(properties.getProperty(captureTrafficLogsPropertyName, "FALSE"));
-        return getTransport(baseUrl, enableTrafficLogging);
+        return getTransport(baseUrl, enableTrafficLogging, protobufClientConfig.asyncAdapterType(), protobufClientConfig.schedulerType(),
+                protobufClientConfig.createAsync());
     }
 
-    private Retrofit getTransport(String baseUrl, boolean enableTrafficLogging) {
+    private Retrofit getTransport(String baseUrl, boolean enableTrafficLogging, AsyncAdapterType asyncAdapterType,
+                                  SchedulerType schedulerType, boolean createAsync) {
         log.debug("getTransport() baseUrl:{}, enableTrafficLogging:{}", baseUrl, enableTrafficLogging);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         setLoggingInterceptor(enableTrafficLogging, httpClient);

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.djr.retrofit2ee.gson.GsonRetrofitProducer;
 import org.djr.retrofit2ee.gson.RetrofitGson;
-import org.djr.retrofit2ee.json.*;
+import org.djr.retrofit2ee.jackson.*;
 import org.djr.retrofit2ee.moshi.MoshiRetrofitProducer;
 import org.djr.retrofit2ee.moshi.RetrofitMoshi;
 import org.djr.retrofit2ee.protobuf.ProtobufRetrofitProducer;
@@ -127,7 +127,7 @@ public class Retrofit2EETest {
     throws IOException {
         FreeGeoIPClient client = retrofitGson.create(FreeGeoIPClient.class);
         assertNotNull(client);
-        Response response = client.getResponse("json").execute().body();
+        Response response = client.getResponse("jackson").execute().body();
         log.debug("testFreeGeoIPClientGson() response:{}", response);
         assertNotNull(response);
     }
@@ -138,7 +138,7 @@ public class Retrofit2EETest {
             throws IOException {
         FreeGeoIPClient client = retrofitMoshi.create(FreeGeoIPClient.class);
         assertNotNull(client);
-        Response response = client.getResponse("json").execute().body();
+        Response response = client.getResponse("jackson").execute().body();
         log.debug("testFreeGeoIPClientMoshi() response:{}", response);
         assertNotNull(response);
     }

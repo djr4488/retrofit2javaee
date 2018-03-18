@@ -7,59 +7,76 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 @Root(strict = false)
+@XmlRootElement
 public class Response {
     @Element(name = "IP", required = false)
     @Json(name = "ip")
     @SerializedName("ip")
+    @XmlElement(name = "IP")
     private String ip;
     @Element(name = "CountryCode", required = false)
     @Json(name = "country_code")
     @SerializedName("country_code")
+    @XmlElement(name = "CountryCode", required = false)
     private String countryCode;
     @Element(name = "CountryName", required = false)
     @Json(name = "country_name")
     @SerializedName("country_name")
+    @XmlElement(name = "CountryName", required = false)
     private String countryName;
     @Element(name = "RegionCode", required = false)
     @Json(name = "region_code")
     @SerializedName("region_code")
+    @XmlElement(name = "RegionCode", required = false)
     private String regionCode;
     @Element(name = "RegionName", required = false)
     @Json(name = "region_name")
     @SerializedName("region_name")
+    @XmlElement(name = "RegionName", required = false)
     private String regionName;
     @Element(name = "City", required = false)
     @Json(name = "city")
     @SerializedName("city")
+    @XmlElement(name = "City", required = false)
     private String city;
     @Element(name = "ZipCode", required = false)
     @Json(name = "zip_code")
     @SerializedName("zip_code")
+    @XmlElement(name = "ZipCode", required = false)
     private String zipCode;
     @Element(name = "TimeZone", required = false)
     @Json(name = "time_zone")
     @SerializedName("time_zone")
+    @XmlElement(name = "TimeZone", required = false)
     private String timeZone;
     @Element(name = "Latitude", required = false)
     @Json(name = "latitude")
     @SerializedName("latitude")
+    @XmlElement(name = "Latitude", required = false)
     private String latitude;
     @Element(name = "Longitude", required = false)
     @Json(name = "longitude")
     @SerializedName("longitude")
+    @XmlElement(name = "Longitude", required = false)
     private String longitude;
     @Element(name = "MetroCode", required = false)
     @Json(name = "metro_code")
     @SerializedName("metro_code")
+    @XmlElement(name = "MetroCode", required = false)
     private String metroCode;
     @Element(name = "error", required = false)
     @Json(name = "error")
     @SerializedName("error")
+    @XmlElement(name = "error", required = false)
     private String error;
     @Element(name = "status", required = false)
     @Json(name = "status")
     @SerializedName("status")
+    @XmlElement(name = "status", required = false)
     private String status;
 
     public Response() {

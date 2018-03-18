@@ -5,7 +5,7 @@ Purpose of this was so I didn't have to repeat all the boilerplate code in a Jav
 So I decided I'd write a small annotation driven project which would allow me to use Retrofit2 in an EE application.  I don't know if it would work with SpringFrameworks or not, but in that world I think you have Feign or RestTemplate anyway, so probably no need for this.
 
 # What is supported?
-Retrofit 2.3.0(which I do believe is the latest version at this time).  Found here http://square.github.io/retrofit/
+Retrofit 2.4.0(which I do believe is the latest version at this time).  Found here http://square.github.io/retrofit/
 Also, JSON(Jackson implementation).  
 
 # What do I hope to support?

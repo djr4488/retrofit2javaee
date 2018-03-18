@@ -1,9 +1,10 @@
-package org.djr.retrofit2ee.json;
+package org.djr.retrofit2ee.jackson;
 
 import org.djr.retrofit2ee.AsyncAdapterType;
 import org.djr.retrofit2ee.SchedulerType;
 
 import javax.enterprise.util.Nonbinding;
+import javax.inject.Inject;
 import javax.inject.Qualifier;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

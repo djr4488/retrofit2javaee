@@ -1,11 +1,10 @@
-package org.djr.retrofit2ee.json;
+package org.djr.retrofit2ee.jackson;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
 
 import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Copyright 11-9-2017 Danny Rucker
@@ -22,10 +21,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-@Retention(RUNTIME)
-@Target({FIELD, METHOD})
-public @interface RetrofitJsonConfig {
-	String captureTrafficLogsPropertyName();
-	String baseUrlPropertyName();
+@Target({})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface DeserializationFeatureConfig {
+	DeserializationFeature feature();
+	boolean value();
 }
-

@@ -2,8 +2,10 @@ package org.djr.retrofit2ee.xml;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import org.djr.retrofit2ee.AsyncAdapterType;
 import org.djr.retrofit2ee.RetrofitProperties;
 import org.djr.retrofit2ee.RetrofitPropertyLoader;
+import org.djr.retrofit2ee.SchedulerType;
 import org.djr.retrofit2ee.protobuf.ProtobufRetrofitProducer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
@@ -17,8 +19,13 @@ import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 import java.util.Properties;
 
+@Deprecated
+/**
+ * @Deprecated
+ * @See org.djr.retrofit2ee.jaxb.RetrofitJaxB
+ */
 public class XmlRetrofitProducer {
-    private static Logger log = LoggerFactory.getLogger(ProtobufRetrofitProducer.class);
+    private static Logger log = LoggerFactory.getLogger(XmlRetrofitProducer.class);
     @Inject
     @RetrofitProperties
     private Properties properties;
@@ -34,10 +41,12 @@ public class XmlRetrofitProducer {
         String baseUrl = properties.getProperty(baseUrlPropertyName);
         Boolean enableTrafficLogging =
                 Boolean.parseBoolean(properties.getProperty(captureTrafficLogsPropertyName, "FALSE"));
-        return getTransport(baseUrl, enableTrafficLogging);
+        return getTransport(baseUrl, enableTrafficLogging, xmlClientConfig.asyncAdapterType(), xmlClientConfig.schedulerType(),
+                xmlClientConfig.createAsync());
     }
 
-    private Retrofit getTransport(String baseUrl, boolean enableTrafficLogging) {
+    private Retrofit getTransport(String baseUrl, boolean enableTrafficLogging, AsyncAdapterType asyncAdapterType,
+                                  SchedulerType schedulerType, boolean createAsync) {
         log.debug("getTransport() baseUrl:{}, enableTrafficLogging:{}", baseUrl, enableTrafficLogging);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         setLoggingInterceptor(enableTrafficLogging, httpClient);

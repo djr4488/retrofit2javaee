@@ -1,7 +1,6 @@
-package org.djr.retrofit2ee.json;
+package org.djr.retrofit2ee.jackson;
 
-import com.fasterxml.jackson.databind.MapperFeature;
-
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -21,9 +20,8 @@ import java.lang.annotation.Target;
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-@Target({})
+@Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MapperFeatureConfig {
-	MapperFeature feature();
-	boolean value();
+public @interface JacksonSerializationFeature {
+	SerializationFeatureConfig[] features();
 }

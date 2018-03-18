@@ -1,4 +1,4 @@
-package org.djr.retrofit2ee.json;
+package org.djr.retrofit2ee.jackson;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -22,6 +22,6 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface JacksonDeserializationFeature {
-	DeserializationFeatureConfig[] features();
+public @interface JacksonJsonGeneratorFeature {
+	JsonGeneratorConfig[] features();
 }

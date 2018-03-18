@@ -1,4 +1,4 @@
-package org.djr.retrofit2ee.json;
+package org.djr.retrofit2ee.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -45,7 +45,6 @@ public class JsonTest {
     @RetrofitJson(captureTrafficLogsPropertyName = "JSON.enableTrafficLogging",
             baseUrlPropertyName = "JSON.baseUrlPropertyName")
     private Retrofit retrofitJson;
-
     @JacksonJsonParserFeature(features = {
             @JsonParserConfig(feature = JsonParser.Feature.ALLOW_NUMERIC_LEADING_ZEROS, value = true)})
     @JacksonJsonGeneratorFeature(features = {
@@ -54,68 +53,10 @@ public class JsonTest {
     @RetrofitJson(captureTrafficLogsPropertyName = "JSON.enableTrafficLogging",
             baseUrlPropertyName = "JSON.baseUrlPropertyName")
     private Retrofit retrofitJson2;
-
     @Inject
     @RetrofitJson(captureTrafficLogsPropertyName = "JSON.noTrafficLogging",
             baseUrlPropertyName = "JSON.baseUrlPropertyName")
     private Retrofit retrofitJson3;
-
-    @Inject
-    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.noTrafficLogging",
-            baseUrlPropertyName = "JSON.baseUrlPropertyName",
-            asyncAdapterType = AsyncAdapterType.RXJAVA2,
-            schedulerType = SchedulerType.NONE,
-            createAsync = false)
-    private Retrofit rxJava2NoSchedulerCreate;
-
-    @Inject
-    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.noTrafficLogging",
-            baseUrlPropertyName = "JSON.baseUrlPropertyName",
-            asyncAdapterType = AsyncAdapterType.RXJAVA2,
-            schedulerType = SchedulerType.NONE,
-            createAsync = true)
-    private Retrofit rxJava2NoSchedulerCreateAsync;
-
-    @Inject
-    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.noTrafficLogging",
-            baseUrlPropertyName = "JSON.baseUrlPropertyName",
-            asyncAdapterType = AsyncAdapterType.RXJAVA2,
-            schedulerType = SchedulerType.COMPUTATION,
-            createAsync = false)
-    private Retrofit rxJava2ComputationScheduler;
-
-    @Inject
-    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.noTrafficLogging",
-            baseUrlPropertyName = "JSON.baseUrlPropertyName",
-            asyncAdapterType = AsyncAdapterType.RXJAVA2,
-            schedulerType = SchedulerType.IO,
-            createAsync = false)
-    private Retrofit rxJava2IOScheduler;
-
-    @Inject
-    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.noTrafficLogging",
-            baseUrlPropertyName = "JSON.baseUrlPropertyName",
-            asyncAdapterType = AsyncAdapterType.RXJAVA2,
-            schedulerType = SchedulerType.NEW_THREAD,
-            createAsync = false)
-    private Retrofit rxJava2NewThreadScheduler;
-
-    @Inject
-    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.noTrafficLogging",
-            baseUrlPropertyName = "JSON.baseUrlPropertyName",
-            asyncAdapterType = AsyncAdapterType.RXJAVA2,
-            schedulerType = SchedulerType.SINGLE,
-            createAsync = false)
-    private Retrofit rxJava2SingleScheduler;
-
-    @Inject
-    @RetrofitJson(captureTrafficLogsPropertyName = "JSON.noTrafficLogging",
-            baseUrlPropertyName = "JSON.baseUrlPropertyName",
-            asyncAdapterType = AsyncAdapterType.RXJAVA2,
-            schedulerType = SchedulerType.TRAMPOLINE,
-            createAsync = false)
-    private Retrofit rxJava2TrampolineScheduler;
-
     @Produces
     @RetrofitProperties
     private Properties properties = new Properties();
@@ -144,7 +85,7 @@ public class JsonTest {
     throws IOException {
         BehaviorDelegate<FreeGeoIPClient> behaviorDelegate = mockRetrofit.create(FreeGeoIPClient.class);
         FreeGeoIPClient mockClient = new MockFreeGeoIPClient(behaviorDelegate);
-        Call<Response> response = mockClient.getResponse("json");
+        Call<Response> response = mockClient.getResponse("jackson");
         retrofit2.Response<Response> resp = response.execute();
         assertTrue("expected true for successful", resp.isSuccessful());
         assertNotNull(resp.body());
@@ -157,7 +98,7 @@ public class JsonTest {
     throws IOException {
         BehaviorDelegate<FreeGeoIPClient> behaviorDelegate = mockRetrofit.create(FreeGeoIPClient.class);
         FreeGeoIPClient mockClient = new MockFreeGeoIPClientFailure(behaviorDelegate);
-        Call<Response> response = mockClient.getResponse("json");
+        Call<Response> response = mockClient.getResponse("jackson");
         retrofit2.Response<Response> resp = response.execute();
         assertFalse("expected false for successful", resp.isSuccessful());
         assertEquals(404, resp.code());

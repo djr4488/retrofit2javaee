@@ -15,7 +15,7 @@ public class MockFreeGeoIPClientFailure  implements FreeGeoIPClient {
     }
 
     public Call<org.djr.retrofit2ee.Response> getResponse(String format) {
-        Response response = Response.error(404, ResponseBody.create(MediaType.parse("application/json") ,"{}"));
+        Response response = Response.error(404, ResponseBody.create(MediaType.parse("application/jackson") ,"{}"));
         return delegate.returning(Calls.response(response)).getResponse("test");
     }
 }

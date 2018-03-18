@@ -1,4 +1,4 @@
-package org.djr.retrofit2ee.json;
+package org.djr.retrofit2ee.jackson;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;

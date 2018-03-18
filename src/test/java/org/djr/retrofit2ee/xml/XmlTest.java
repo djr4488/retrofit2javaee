@@ -1,7 +1,6 @@
 package org.djr.retrofit2ee.xml;
 
 import org.djr.retrofit2ee.*;
-import org.djr.retrofit2ee.json.*;
 import org.jglue.cdiunit.AdditionalClasses;
 import org.jglue.cdiunit.CdiRunner;
 import org.junit.Before;

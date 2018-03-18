@@ -1,6 +1,7 @@
-package org.djr.retrofit2ee.json;
+package org.djr.retrofit2ee.jackson;
 
-import java.lang.annotation.ElementType;
+import com.fasterxml.jackson.core.JsonGenerator;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -20,8 +21,9 @@ import java.lang.annotation.Target;
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-@Target({ElementType.FIELD})
+@Target({})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface JacksonModule {
-	Class[] jacksonModules();
+public @interface JsonGeneratorConfig {
+	JsonGenerator.Feature feature();
+	boolean value();
 }

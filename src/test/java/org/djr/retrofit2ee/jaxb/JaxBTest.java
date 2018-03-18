@@ -1,7 +1,11 @@
-package org.djr.retrofit2ee.gson;
+package org.djr.retrofit2ee.jaxb;
 
-import org.djr.retrofit2ee.*;
-import org.djr.retrofit2ee.jackson.RetrofitJson;
+import org.djr.retrofit2ee.FreeGeoIPClient;
+import org.djr.retrofit2ee.MockFreeGeoIPClient;
+import org.djr.retrofit2ee.MockFreeGeoIPClientFailure;
+import org.djr.retrofit2ee.Response;
+import org.djr.retrofit2ee.RetrofitProducer;
+import org.djr.retrofit2ee.RetrofitProperties;
 import org.jglue.cdiunit.AdditionalClasses;
 import org.jglue.cdiunit.CdiRunner;
 import org.junit.Before;
@@ -20,19 +24,19 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Properties;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(CdiRunner.class)
-@AdditionalClasses({GsonRetrofitProducer.class, RetrofitProducer.class})
-public class GsonTest {
-    private static Logger log = LoggerFactory.getLogger(GsonTest.class);
+@AdditionalClasses({JaxBRetrofitProducer.class, RetrofitProducer.class})
+public class JaxBTest {
+    private static Logger log = LoggerFactory.getLogger(JaxBTest.class);
     @Inject
-    @RetrofitGson(captureTrafficLogsPropertyName = "GSON.enableTrafficLogging",
-            baseUrlPropertyName = "GSON.baseUrlPropertyName")
-    private Retrofit retrofitGson;
+    @RetrofitJaxB(captureTrafficLogsPropertyName = "JaxB.enableTrafficLogging",
+            baseUrlPropertyName = "JaxB.baseUrlPropertyName")
+    private Retrofit retrofitXml;
     @Produces
     @RetrofitProperties
     private Properties properties = new Properties();
@@ -40,9 +44,9 @@ public class GsonTest {
     private MockRetrofit mockRetrofit;
 
 
-    public GsonTest() {
-        properties.setProperty("GSON.enableTrafficLogging", "TRUE");
-        properties.setProperty("GSON.baseUrlPropertyName", "http://freegeoip.net/");
+    public JaxBTest() {
+        properties.setProperty("JaxB.enableTrafficLogging", "TRUE");
+        properties.setProperty("JaxB.baseUrlPropertyName", "http://freegeoip.net/");
     }
 
     @Before
@@ -50,30 +54,32 @@ public class GsonTest {
         networkBehavior = NetworkBehavior.create();
         networkBehavior.setErrorPercent(0);
         networkBehavior.setFailurePercent(0);
-        mockRetrofit = new MockRetrofit.Builder(retrofitGson)
+        mockRetrofit = new MockRetrofit.Builder(retrofitXml)
                 .networkBehavior(networkBehavior)
                 .build();
     }
 
     @Test
     public void testSuccessfulClientCall()
-    throws IOException {
+            throws IOException {
         BehaviorDelegate<FreeGeoIPClient> behaviorDelegate = mockRetrofit.create(FreeGeoIPClient.class);
         FreeGeoIPClient mockClient = new MockFreeGeoIPClient(behaviorDelegate);
-        Call<Response> response = mockClient.getResponse("gson");
+        Call<Response> response = mockClient.getResponse("xml");
         retrofit2.Response<Response> resp = response.execute();
         assertTrue("expected true for successful", resp.isSuccessful());
         assertNotNull(resp.body());
         assertEquals("0.0.0.0", resp.body().getIp());
         assertEquals("Olathe", resp.body().getCity());
+        log.debug("testSuccessfulClientCall() body:{}", resp.body());
     }
+
 
     @Test
     public void testFailureClientCall()
-    throws IOException {
+            throws IOException {
         BehaviorDelegate<FreeGeoIPClient> behaviorDelegate = mockRetrofit.create(FreeGeoIPClient.class);
         FreeGeoIPClient mockClient = new MockFreeGeoIPClientFailure(behaviorDelegate);
-        Call<Response> response = mockClient.getResponse("gson");
+        Call<Response> response = mockClient.getResponse("xml");
         retrofit2.Response<Response> resp = response.execute();
         assertFalse("expected false for successful", resp.isSuccessful());
         assertEquals(404, resp.code());
