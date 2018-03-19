@@ -2,11 +2,7 @@ package org.djr.retrofit2ee.xml;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import org.djr.retrofit2ee.AsyncAdapterType;
 import org.djr.retrofit2ee.RetrofitProperties;
-import org.djr.retrofit2ee.RetrofitPropertyLoader;
-import org.djr.retrofit2ee.SchedulerType;
-import org.djr.retrofit2ee.protobuf.ProtobufRetrofitProducer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
 import org.slf4j.Logger;
@@ -32,8 +28,7 @@ public class XmlRetrofitProducer {
 
     @Produces
     @RetrofitXml
-    public Retrofit getClient(InjectionPoint injectionPoint)
-            throws NoSuchFieldException, InstantiationException, IllegalAccessException {
+    public Retrofit getClient(InjectionPoint injectionPoint) {
         RetrofitXml xmlClientConfig = injectionPoint.getAnnotated().getAnnotation(RetrofitXml.class);
         log.debug("getClient() injecting retrofit xml client with annotation:{}", xmlClientConfig);
         String baseUrlPropertyName = xmlClientConfig.baseUrlPropertyName();
@@ -41,12 +36,10 @@ public class XmlRetrofitProducer {
         String baseUrl = properties.getProperty(baseUrlPropertyName);
         Boolean enableTrafficLogging =
                 Boolean.parseBoolean(properties.getProperty(captureTrafficLogsPropertyName, "FALSE"));
-        return getTransport(baseUrl, enableTrafficLogging, xmlClientConfig.asyncAdapterType(), xmlClientConfig.schedulerType(),
-                xmlClientConfig.createAsync());
+        return getTransport(baseUrl, enableTrafficLogging);
     }
 
-    private Retrofit getTransport(String baseUrl, boolean enableTrafficLogging, AsyncAdapterType asyncAdapterType,
-                                  SchedulerType schedulerType, boolean createAsync) {
+    private Retrofit getTransport(String baseUrl, boolean enableTrafficLogging) {
         log.debug("getTransport() baseUrl:{}, enableTrafficLogging:{}", baseUrl, enableTrafficLogging);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         setLoggingInterceptor(enableTrafficLogging, httpClient);

@@ -34,7 +34,8 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(CdiRunner.class)
 @AdditionalClasses({GsonRetrofitProducer.class, ProtobufRetrofitProducer.class, XmlRetrofitProducer.class,
-        JsonRetrofitProducer.class, RetrofitProducer.class, MoshiRetrofitProducer.class, JaxBRetrofitProducer.class})
+        JsonRetrofitProducer.class, RetrofitProducer.class, MoshiRetrofitProducer.class, JaxBRetrofitProducer.class,
+        CustomContextForJAXB.class})
 public class Retrofit2EETest {
     private static Logger log = LoggerFactory.getLogger(Retrofit2EETest.class);
 
@@ -75,6 +76,12 @@ public class Retrofit2EETest {
     @RetrofitJaxB(captureTrafficLogsPropertyName = "XML.enableTrafficLogging",
             baseUrlPropertyName = "XML.baseUrlPropertyName")
     private Retrofit retrofitJaxB;
+
+    @Inject
+    @RetrofitJaxB(captureTrafficLogsPropertyName = "XML.enableTrafficLogging",
+            baseUrlPropertyName = "XML.baseUrlPropertyName",
+            customJAXBContextName = "testCustomJAXBContext")
+    private Retrofit customJaxBRetrofit;
 
     @Produces
     @RetrofitProperties
@@ -159,5 +166,18 @@ public class Retrofit2EETest {
         Response response = client.getResponse("jackson").execute().body();
         log.debug("testFreeGeoIPClientMoshi() response:{}", response);
         assertNotNull(response);
+    }
+
+    @Test
+    public void testJaxBCustomContext() {
+        FreeGeoIPClient client = customJaxBRetrofit.create(FreeGeoIPClient.class);
+        assertNotNull(client);
+        try {
+            Response response = client.getResponse("xml").execute().body();
+            log.debug("testFreeGeoIPClient() JaxB response:{}", response);
+            assertNotNull(response);
+        } catch (IOException ioEx) {
+            log.error("unexpected error", ioEx);
+        }
     }
 }

@@ -5,9 +5,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import org.djr.retrofit2ee.AdapterUtils;
 import org.djr.retrofit2ee.AsyncAdapterType;
 import org.djr.retrofit2ee.RetrofitProperties;
-import org.djr.retrofit2ee.RetrofitPropertyLoader;
 import org.djr.retrofit2ee.SchedulerType;
-import org.djr.retrofit2ee.protobuf.ProtobufRetrofitProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import retrofit2.Retrofit;
@@ -30,8 +28,7 @@ public class GsonRetrofitProducer {
 
     @Produces
     @RetrofitGson
-    public Retrofit getClient(InjectionPoint injectionPoint)
-            throws NoSuchFieldException, InstantiationException, IllegalAccessException {
+    public Retrofit getClient(InjectionPoint injectionPoint) {
         RetrofitGson gsonClientConfig = injectionPoint.getAnnotated().getAnnotation(RetrofitGson.class);
         log.trace("getClient() injecting retrofit gson client with annotation:{}", gsonClientConfig);
         String baseUrlPropertyName = gsonClientConfig.baseUrlPropertyName();

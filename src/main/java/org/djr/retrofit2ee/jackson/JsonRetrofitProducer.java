@@ -43,22 +43,23 @@ public class JsonRetrofitProducer implements RetrofitProducer {
 	@Produces
 	@RetrofitJson
 	public Retrofit getClient(InjectionPoint injectionPoint)
-	throws NoSuchFieldException, InstantiationException, IllegalAccessException {
+	throws InstantiationException, IllegalAccessException {
 		RetrofitJson jsonClientConfig = injectionPoint.getAnnotated().getAnnotation(RetrofitJson.class);
 		log.debug("getClient() injecting retrofit jackson client with annotation:{}", jsonClientConfig);
-		ObjectMapper objectMapper = null;
+		ObjectMapper objectMapper;
 		String baseUrlPropertyName = jsonClientConfig.baseUrlPropertyName();
 		String captureTrafficLogsPropertyName = jsonClientConfig.captureTrafficLogsPropertyName();
 		String baseUrl = properties.getProperty(baseUrlPropertyName);
 		Boolean enableTrafficLogging =
 				Boolean.parseBoolean(properties.getProperty(captureTrafficLogsPropertyName, "FALSE"));
-		objectMapper = configureJackson(injectionPoint, objectMapper);
+		objectMapper = configureJackson(injectionPoint);
 		return getTransport(objectMapper, baseUrl, enableTrafficLogging, jsonClientConfig.asyncAdapterType(),
 				jsonClientConfig.schedulerType(), jsonClientConfig.createAsync());
 	}
 
-	private ObjectMapper configureJackson(InjectionPoint injectionPoint, ObjectMapper objectMapper)
+	private ObjectMapper configureJackson(InjectionPoint injectionPoint)
 	throws InstantiationException, IllegalAccessException {
+		ObjectMapper objectMapper = null;
 		JacksonModule jacksonModule = injectionPoint.getAnnotated().getAnnotation(JacksonModule.class);
 		if (null != jacksonModule) {
 			objectMapper = getObjectMapper(objectMapper);

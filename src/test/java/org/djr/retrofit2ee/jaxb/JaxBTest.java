@@ -1,5 +1,6 @@
 package org.djr.retrofit2ee.jaxb;
 
+import org.djr.retrofit2ee.CustomContextForJAXB;
 import org.djr.retrofit2ee.FreeGeoIPClient;
 import org.djr.retrofit2ee.MockFreeGeoIPClient;
 import org.djr.retrofit2ee.MockFreeGeoIPClientFailure;
@@ -30,7 +31,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(CdiRunner.class)
-@AdditionalClasses({JaxBRetrofitProducer.class, RetrofitProducer.class})
+@AdditionalClasses({JaxBRetrofitProducer.class, RetrofitProducer.class, CustomContextForJAXB.class})
 public class JaxBTest {
     private static Logger log = LoggerFactory.getLogger(JaxBTest.class);
     @Inject

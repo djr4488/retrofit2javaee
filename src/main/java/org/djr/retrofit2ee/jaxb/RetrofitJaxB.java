@@ -23,4 +23,5 @@ public @interface RetrofitJaxB {
     @Nonbinding AsyncAdapterType asyncAdapterType() default AsyncAdapterType.NONE;
     @Nonbinding SchedulerType schedulerType() default SchedulerType.NONE;
     @Nonbinding boolean createAsync() default false;
+    @Nonbinding String customJAXBContextName() default "";
 }
