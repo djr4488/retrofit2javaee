@@ -1,7 +1,11 @@
 package org.djr.retrofit2ee.gson;
 
-import org.djr.retrofit2ee.*;
-import org.djr.retrofit2ee.jackson.RetrofitJson;
+import org.djr.retrofit2ee.FreeGeoIPClient;
+import org.djr.retrofit2ee.MockFreeGeoIPClient;
+import org.djr.retrofit2ee.MockFreeGeoIPClientFailure;
+import org.djr.retrofit2ee.Response;
+import org.djr.retrofit2ee.RetrofitProducer;
+import org.djr.retrofit2ee.RetrofitProperties;
 import org.jglue.cdiunit.AdditionalClasses;
 import org.jglue.cdiunit.CdiRunner;
 import org.junit.Before;

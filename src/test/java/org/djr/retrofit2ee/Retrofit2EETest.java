@@ -102,6 +102,7 @@ public class Retrofit2EETest {
         assertNotNull(retrofitXml);
         assertNotNull(retrofitProtobuf);
         assertNotNull(retrofitJaxB);
+        assertNotNull(customJaxBRetrofit);
     }
 
     @Test
