@@ -28,6 +28,7 @@ import java.util.Properties;
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(CdiRunner.class)
@@ -84,5 +85,21 @@ public class JaxBTest {
         retrofit2.Response<Response> resp = response.execute();
         assertFalse("expected false for successful", resp.isSuccessful());
         assertEquals(404, resp.code());
+    }
+
+    @Test
+    public void testExceptionConstructors() {
+        JAXBRetrofitException jrEx = new JAXBRetrofitException();
+        assertNull(jrEx.getMessage());
+        jrEx = new JAXBRetrofitException("test");
+        assertEquals("test", jrEx.getMessage());
+        jrEx = new JAXBRetrofitException("test", new Exception());
+        assertEquals("test", jrEx.getMessage());
+        assertNotNull(jrEx.getCause());
+        jrEx = new JAXBRetrofitException(new Exception());
+        assertNotNull(jrEx.getCause());
+        jrEx = new JAXBRetrofitException("test", new Exception(), false, false);
+        assertEquals("test", jrEx.getMessage());
+        assertNotNull(jrEx.getCause());
     }
 }

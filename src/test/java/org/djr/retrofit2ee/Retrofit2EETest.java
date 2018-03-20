@@ -18,10 +18,6 @@ import org.djr.retrofit2ee.xml.RetrofitXml;
 import org.djr.retrofit2ee.xml.XmlRetrofitProducer;
 import org.jglue.cdiunit.AdditionalClasses;
 import org.jglue.cdiunit.CdiRunner;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +29,6 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 import static junit.framework.Assert.assertEquals;
