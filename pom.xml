@@ -18,6 +18,7 @@
         <okhttp3.version>3.10.0</okhttp3.version>
         <wire.version>2.2.0</wire.version>
         <jackson.version>2.9.4</jackson.version>
+        <jsoup.version>1.11.2</jsoup.version>
     </properties>
          
     <licenses>
@@ -152,6 +153,18 @@
         </dependency>
         <dependency>
             <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-scalars</artifactId>
+            <version>${retrofit.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>converter-guava</artifactId>
+            <version>${retrofit.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
             <artifactId>adapter-rxjava2</artifactId>
             <version>${retrofit.version}</version>
             <scope>compile</scope>
@@ -213,6 +226,14 @@
             <artifactId>wire-runtime</artifactId>
             <version>${wire.version}</version>
             <scope>runtime</scope>
+        </dependency>
+
+        <!-- jsoup -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- testing -->

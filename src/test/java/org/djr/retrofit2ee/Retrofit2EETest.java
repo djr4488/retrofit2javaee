@@ -12,10 +12,16 @@ import org.djr.retrofit2ee.moshi.MoshiRetrofitProducer;
 import org.djr.retrofit2ee.moshi.RetrofitMoshi;
 import org.djr.retrofit2ee.protobuf.ProtobufRetrofitProducer;
 import org.djr.retrofit2ee.protobuf.RetrofitProtobuf;
+import org.djr.retrofit2ee.scalar.RetrofitScalar;
+import org.djr.retrofit2ee.scalar.ScalarsRetrofitProducer;
 import org.djr.retrofit2ee.xml.RetrofitXml;
 import org.djr.retrofit2ee.xml.XmlRetrofitProducer;
 import org.jglue.cdiunit.AdditionalClasses;
 import org.jglue.cdiunit.CdiRunner;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +33,7 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import static junit.framework.Assert.assertEquals;
@@ -35,7 +42,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(CdiRunner.class)
 @AdditionalClasses({GsonRetrofitProducer.class, ProtobufRetrofitProducer.class, XmlRetrofitProducer.class,
         JsonRetrofitProducer.class, RetrofitProducer.class, MoshiRetrofitProducer.class, JaxBRetrofitProducer.class,
-        CustomContextForJAXB.class})
+        CustomContextForJAXB.class, ScalarsRetrofitProducer.class})
 public class Retrofit2EETest {
     private static Logger log = LoggerFactory.getLogger(Retrofit2EETest.class);
 
@@ -83,6 +90,11 @@ public class Retrofit2EETest {
             customJAXBContextName = "testCustomJAXBContext")
     private Retrofit customJaxBRetrofit;
 
+    @Inject
+    @RetrofitScalar(captureTrafficLogsPropertyName = "Scalars.enableTrafficLogging",
+            baseUrlPropertyName = "Scalars.baseUrlPropertyName")
+    private Retrofit retrofitScalar;
+
     @Produces
     @RetrofitProperties
     Properties properties = new Properties();
@@ -94,6 +106,8 @@ public class Retrofit2EETest {
         properties.setProperty("XML.baseUrlPropertyName", "http://freegeoip.net/");
         properties.setProperty("ProtoBuf.enableTrafficLogging", "TRUE");
         properties.setProperty("ProtoBuf.baseUrlPropertyName", "http://freegeoip.net/");
+        properties.setProperty("Scalars.enableTrafficLogging", "TRUE");
+        properties.setProperty("Scalars.baseUrlPropertyName", "https://tenki.jp/");
     }
 
     @Test
@@ -175,7 +189,37 @@ public class Retrofit2EETest {
         assertNotNull(client);
         try {
             Response response = client.getResponse("xml").execute().body();
-            log.debug("testFreeGeoIPClient() JaxB response:{}", response);
+            log.debug("testJaxBCustomContext() JaxB response:{}", response);
+            assertNotNull(response);
+        } catch (IOException ioEx) {
+            log.error("unexpected error", ioEx);
+        }
+    }
+
+    @Test
+    public void testScalar() {
+        GoogleClient client = retrofitScalar.create(GoogleClient.class);
+        assertNotNull(client);
+        try {
+            String response = client.getResponse().execute().body();
+            //TODO: this is a nifty todo for a different project I'd like to finish one day
+//            Document document = Jsoup.parse(response);
+//            Elements elements = document.body().getElementsByClass("common-indexes-pickup-wrap");
+//            Document docTagName = Jsoup.parse(elements.html());
+//            Elements tagName = docTagName.body().getElementsByTag("li");
+//            for (int idx = 0; idx < tagName.size(); idx++) {
+//                log.debug("testScalar() idx:{}, elements:\n{}", idx, tagName.get(idx));
+//                Element element = tagName.get(idx);
+//                if (0 < element.getElementsContainingText("洗濯").size()) {
+//                    Elements divWithData = element.getElementsByClass("telop");
+//                    Element extractData = divWithData.first();
+//                    String text = extractData.ownText();
+//                    log.debug("testScalar() text:{}", text);
+//                    int delimitIndex = text.trim().indexOf("：");
+//                    String subst = text.substring(delimitIndex + 1);
+//                    log.debug("testScalar() subst:{}", subst);
+//                }
+//            }
             assertNotNull(response);
         } catch (IOException ioEx) {
             log.error("unexpected error", ioEx);
