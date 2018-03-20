@@ -4,6 +4,12 @@ A JavaEE annotation driven Retrofit2 project
 Purpose of this was so I didn't have to repeat all the boilerplate code in a JavaEE application in order to simply create a Retrofit2 client.  While not difficult, it was annoying, especially when generally I used all the same things over and over again.  
 So I decided I'd write a small annotation driven project which would allow me to use Retrofit2 in an EE application.  I don't know if it would work with SpringFrameworks or not, but in that world I think you have Feign or RestTemplate anyway, so probably no need for this.
 
+Status
+======
+
+* Build: [![Build Status](https://travis-ci.org/djr4488/retrofit2javaee.svg?branch=master)](https://travis-ci.org/djr4488/retrofit2javaee)
+* Coverage: [![Coverage Status](https://coveralls.io/repos/djr4488/retrofit2javaee/badge.svg?branch=master)](https://coveralls.io/r/djr4488/retrofit2javaee?branch=master)
+
 # What is supported?
 Retrofit 2.4.0(which I do believe is the latest version at this time).  Found here http://square.github.io/retrofit/
 Also, JSON(Jackson implementation).  
