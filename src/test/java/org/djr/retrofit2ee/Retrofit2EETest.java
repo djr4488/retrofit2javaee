@@ -220,4 +220,10 @@ public class Retrofit2EETest {
             log.error("unexpected error", ioEx);
         }
     }
+
+    @Test
+    public void testConstructorsInUtilsWork() {
+        assertNotNull(new AdapterUtils());
+        assertNotNull(new BeanLookupUtil());
+    }
 }
