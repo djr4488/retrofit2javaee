@@ -294,8 +294,8 @@
         </dependency>
     </dependencies>
 
-    <!--<build>-->
-        <!--<plugins>-->
+    <build>
+        <plugins>
             <!--<plugin>-->
                 <!--<groupId>com.squareup.wire</groupId>-->
                 <!--<artifactId>wire-maven-plugin</artifactId>-->
@@ -320,6 +320,25 @@
                     <!--</execution>-->
                 <!--</executions>-->
             <!--</plugin>-->
-        <!--</plugins>-->
-    <!--</build>-->
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <repoToken>daZA986tJuUZ9hdW6AO3OjPmardiA4mml</repoToken>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <format>xml</format>
+                    <maxmem>256m</maxmem>
+                    <!-- aggregated reports for multi-module projects -->
+                    <aggregate>true</aggregate>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
