@@ -1,31 +1,31 @@
-package org.djr.retrofit2ee.scalar;
+package org.djr.retrofit2ee.guava;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.djr.retrofit2ee.RetrofitProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import retrofit.converter.guava.GuavaOptionalConverterFactory;
 import retrofit2.Retrofit;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 import java.util.Properties;
 
-public class ScalarsRetrofitProducer {
-    private static Logger log = LoggerFactory.getLogger(ScalarsRetrofitProducer.class);
+public class GuavaRetrofitProducer {
+    private static Logger log = LoggerFactory.getLogger(GuavaRetrofitProducer.class);
     @Inject
     @RetrofitProperties
     private Properties properties;
 
     @Produces
-    @RetrofitScalar
+    @RetrofitGuava
     public Retrofit getClient(InjectionPoint injectionPoint) {
-        RetrofitScalar scalarClientConfig = injectionPoint.getAnnotated().getAnnotation(RetrofitScalar.class);
-        log.debug("getClient() injecting retrofit scalar client with annotation:{}", scalarClientConfig);
-        String baseUrlPropertyName = scalarClientConfig.baseUrlPropertyName();
-        String captureTrafficLogsPropertyName = scalarClientConfig.captureTrafficLogsPropertyName();
+        RetrofitGuava guavaClientConfig = injectionPoint.getAnnotated().getAnnotation(RetrofitGuava.class);
+        log.debug("getClient() injecting retrofit guava client with annotation:{}", guavaClientConfig);
+        String baseUrlPropertyName = guavaClientConfig.baseUrlPropertyName();
+        String captureTrafficLogsPropertyName = guavaClientConfig.captureTrafficLogsPropertyName();
         String baseUrl = properties.getProperty(baseUrlPropertyName);
         Boolean enableTrafficLogging =
                 Boolean.parseBoolean(properties.getProperty(captureTrafficLogsPropertyName, "FALSE"));
@@ -37,7 +37,7 @@ public class ScalarsRetrofitProducer {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         setLoggingInterceptor(enableTrafficLogging, httpClient);
         Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GuavaOptionalConverterFactory.create())
                 .baseUrl(baseUrl)
                 .client(httpClient.build());
         retrofitBuilder.client(httpClient.build());
