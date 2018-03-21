@@ -8,7 +8,7 @@ Status
 ======
 
 * Build: [![Build Status](https://travis-ci.org/djr4488/retrofit2javaee.svg?branch=master)](https://travis-ci.org/djr4488/retrofit2javaee)
-* Coverage: [![Coverage Status](https://coveralls.io/repos/djr4488/retrofit2javaee/badge.svg?branch=master)](https://coveralls.io/r/djr4488/retrofit2javaee?branch=master)
+* Coverage: [![Coverage Status](https://coveralls.io/repos/djr4488/retrofit2javaee/badge.svg?branch=master)](https://coveralls.io/r/djr4488/retrofit2javaee?branch=master) [![codecov](https://codecov.io/gh/djr4488/retrofit2javaee/branch/master/graph/badge.svg)](https://codecov.io/gh/djr4488/retrofit2javaee)
 
 # What is supported?
 Retrofit 2.4.0(which I do believe is the latest version at this time).  Found here http://square.github.io/retrofit/
