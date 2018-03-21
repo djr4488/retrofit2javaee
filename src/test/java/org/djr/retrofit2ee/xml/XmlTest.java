@@ -32,6 +32,10 @@ public class XmlTest {
     @RetrofitXml(captureTrafficLogsPropertyName = "XML.enableTrafficLogging",
             baseUrlPropertyName = "XML.baseUrlPropertyName")
     private Retrofit retrofitXml;
+    @Inject
+    @RetrofitXml(captureTrafficLogsPropertyName = "XML.noTrafficLog",
+            baseUrlPropertyName = "XML.baseUrlPropertyName")
+    private Retrofit retrofitXmlNoLog;
     @Produces
     @RetrofitProperties
     private Properties properties = new Properties();
@@ -42,6 +46,7 @@ public class XmlTest {
     public XmlTest() {
         properties.setProperty("XML.enableTrafficLogging", "TRUE");
         properties.setProperty("XML.baseUrlPropertyName", "http://freegeoip.net/");
+        properties.setProperty("XML.noTrafficLog", "FALSE");
     }
 
     @Before
@@ -52,6 +57,12 @@ public class XmlTest {
         mockRetrofit = new MockRetrofit.Builder(retrofitXml)
                 .networkBehavior(networkBehavior)
                 .build();
+    }
+
+    @Test
+    public void testClientInject() {
+        assertNotNull(retrofitXml);
+        assertNotNull(retrofitXmlNoLog);
     }
 
     @Test

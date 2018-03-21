@@ -34,6 +34,10 @@ public class ProtobufTest {
     @RetrofitProtobuf(captureTrafficLogsPropertyName = "PROTO.enableTrafficLogging",
             baseUrlPropertyName = "PROTO.baseUrlPropertyName")
     private Retrofit retrofitProto;
+    @Inject
+    @RetrofitProtobuf(captureTrafficLogsPropertyName = "PROTO.noTrafficLog",
+            baseUrlPropertyName = "PROTO.baseUrlPropertyName")
+    private Retrofit retrofitProtoNoLog;
     @Produces
     @RetrofitProperties
     private Properties properties = new Properties();
@@ -43,6 +47,7 @@ public class ProtobufTest {
     public ProtobufTest() {
         properties.setProperty("PROTO.enableTrafficLogging", "TRUE");
         properties.setProperty("PROTO.baseUrlPropertyName", "http://freegeoip.net/");
+        properties.setProperty("PROTO.noTrafficLog", "FALSE");
     }
 
     @Before
@@ -53,6 +58,12 @@ public class ProtobufTest {
         mockRetrofit = new MockRetrofit.Builder(retrofitProto)
                 .networkBehavior(networkBehavior)
                 .build();
+    }
+
+    @Test
+    public void testClientInject() {
+        assertNotNull(retrofitProto);
+        assertNotNull(retrofitProtoNoLog);
     }
 
     @Test

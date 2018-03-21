@@ -33,6 +33,10 @@ public class WireTest {
     @RetrofitWire(captureTrafficLogsPropertyName = "WIRE.enableTrafficLogging",
             baseUrlPropertyName = "WIRE.baseUrlPropertyName")
     private Retrofit retrofitWire;
+    @Inject
+    @RetrofitWire(captureTrafficLogsPropertyName = "WIRE.noTrafficLog",
+            baseUrlPropertyName = "WIRE.baseUrlPropertyName")
+    private Retrofit retrofitWireNoLog;
     @Produces
     @RetrofitProperties
     private Properties properties = new Properties();
@@ -42,6 +46,7 @@ public class WireTest {
     public WireTest() {
         properties.setProperty("WIRE.enableTrafficLogging", "TRUE");
         properties.setProperty("WIRE.baseUrlPropertyName", "http://freegeoip.net/");
+        properties.setProperty("WIRE.noTrafficLog", "FALSE");
     }
 
     @Before
@@ -52,6 +57,12 @@ public class WireTest {
         mockRetrofit = new MockRetrofit.Builder(retrofitWire)
                 .networkBehavior(networkBehavior)
                 .build();
+    }
+
+    @Test
+    public void testClientInject() {
+        assertNotNull(retrofitWire);
+        assertNotNull(retrofitWireNoLog);
     }
 
     @Test

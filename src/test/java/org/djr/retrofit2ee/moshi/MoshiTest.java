@@ -32,6 +32,10 @@ public class MoshiTest {
     @RetrofitMoshi(captureTrafficLogsPropertyName = "MOSHI.enableTrafficLogging",
             baseUrlPropertyName = "MOSHI.baseUrlPropertyName")
     private Retrofit retrofitMoshi;
+    @Inject
+    @RetrofitMoshi(captureTrafficLogsPropertyName = "MOSHI.noTrafficLog",
+            baseUrlPropertyName = "MOSHI.baseUrlPropertyName")
+    private Retrofit retrofitMoshiNoLog;
     @Produces
     @RetrofitProperties
     private Properties properties = new Properties();
@@ -42,6 +46,7 @@ public class MoshiTest {
     public MoshiTest() {
         properties.setProperty("MOSHI.enableTrafficLogging", "TRUE");
         properties.setProperty("MOSHI.baseUrlPropertyName", "http://freegeoip.net/");
+        properties.setProperty("MOSHI.noTrafficLog", "FALSE");
     }
 
     @Before
@@ -52,6 +57,12 @@ public class MoshiTest {
         mockRetrofit = new MockRetrofit.Builder(retrofitMoshi)
                 .networkBehavior(networkBehavior)
                 .build();
+    }
+
+    @Test
+    public void testClientInject() {
+        assertNotNull(retrofitMoshi);
+        assertNotNull(retrofitMoshiNoLog);
     }
 
     @Test

@@ -37,6 +37,10 @@ public class ScalarsTest {
     @RetrofitScalar(captureTrafficLogsPropertyName = "Scalars.enableTrafficLogging",
             baseUrlPropertyName = "Scalars.baseUrlPropertyName")
     private Retrofit retrofitScalar;
+    @Inject
+    @RetrofitScalar(captureTrafficLogsPropertyName = "Scalars.noTrafficLog",
+            baseUrlPropertyName = "Scalars.baseUrlPropertyName")
+    private Retrofit retrofitScalarNoLog;
     @Produces
     @RetrofitProperties
     private Properties properties = new Properties();
@@ -47,6 +51,7 @@ public class ScalarsTest {
     public ScalarsTest() {
         properties.setProperty("Scalars.enableTrafficLogging", "TRUE");
         properties.setProperty("Scalars.baseUrlPropertyName", "http://freegeoip.net/");
+        properties.setProperty("Scalars.noTrafficLog", "FALSE");
     }
 
     @Before
@@ -57,6 +62,12 @@ public class ScalarsTest {
         mockRetrofit = new MockRetrofit.Builder(retrofitScalar)
                 .networkBehavior(networkBehavior)
                 .build();
+    }
+
+    @Test
+    public void testClientInject() {
+        assertNotNull(retrofitScalar);
+        assertNotNull(retrofitScalarNoLog);
     }
 
     @Test

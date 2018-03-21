@@ -37,6 +37,10 @@ public class GsonTest {
     @RetrofitGson(captureTrafficLogsPropertyName = "GSON.enableTrafficLogging",
             baseUrlPropertyName = "GSON.baseUrlPropertyName")
     private Retrofit retrofitGson;
+    @Inject
+    @RetrofitGson(captureTrafficLogsPropertyName = "GSON.noTrafficLog",
+            baseUrlPropertyName = "GSON.baseUrlPropertyName")
+    private Retrofit retrofitGsonNoTrafficLog;
     @Produces
     @RetrofitProperties
     private Properties properties = new Properties();
@@ -47,6 +51,7 @@ public class GsonTest {
     public GsonTest() {
         properties.setProperty("GSON.enableTrafficLogging", "TRUE");
         properties.setProperty("GSON.baseUrlPropertyName", "http://freegeoip.net/");
+        properties.setProperty("GSON.noTrafficLog", "FALSE");
     }
 
     @Before
@@ -57,6 +62,12 @@ public class GsonTest {
         mockRetrofit = new MockRetrofit.Builder(retrofitGson)
                 .networkBehavior(networkBehavior)
                 .build();
+    }
+
+    @Test
+    public void testClientCreated() {
+        assertNotNull(retrofitGson);
+        assertNotNull(retrofitGsonNoTrafficLog);
     }
 
     @Test

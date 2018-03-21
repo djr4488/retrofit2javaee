@@ -37,6 +37,10 @@ public class GuavaTest {
     @RetrofitGuava(captureTrafficLogsPropertyName = "Guava.enableTrafficLogging",
             baseUrlPropertyName = "Guava.baseUrlPropertyName")
     private Retrofit retrofitGuava;
+    @Inject
+    @RetrofitGuava(captureTrafficLogsPropertyName = "Guava.enableTrafficLogging",
+            baseUrlPropertyName = "Guava.noTrafficLog")
+    private Retrofit retrofitGuavaNoLog;
     @Produces
     @RetrofitProperties
     private Properties properties = new Properties();
@@ -47,6 +51,7 @@ public class GuavaTest {
     public GuavaTest() {
         properties.setProperty("Guava.enableTrafficLogging", "TRUE");
         properties.setProperty("Guava.baseUrlPropertyName", "http://freegeoip.net/");
+        properties.setProperty("Guava.noTrafficLog", "FALSE");
     }
 
     @Before
@@ -57,6 +62,12 @@ public class GuavaTest {
         mockRetrofit = new MockRetrofit.Builder(retrofitGuava)
                 .networkBehavior(networkBehavior)
                 .build();
+    }
+
+    @Test
+    public void testClientCreated() {
+        assertNotNull(retrofitGuava);
+        assertNotNull(retrofitGuavaNoLog);
     }
 
     @Test

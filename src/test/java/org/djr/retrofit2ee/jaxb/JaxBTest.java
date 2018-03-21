@@ -39,6 +39,10 @@ public class JaxBTest {
     @RetrofitJaxB(captureTrafficLogsPropertyName = "JaxB.enableTrafficLogging",
             baseUrlPropertyName = "JaxB.baseUrlPropertyName")
     private Retrofit retrofitJaxB;
+    @Inject
+    @RetrofitJaxB(captureTrafficLogsPropertyName = "JaxB.noTrafficLog",
+            baseUrlPropertyName = "JaxB.baseUrlPropertyName")
+    private Retrofit retrofitJaxBNoLog;
     @Produces
     @RetrofitProperties
     private Properties properties = new Properties();
@@ -49,6 +53,7 @@ public class JaxBTest {
     public JaxBTest() {
         properties.setProperty("JaxB.enableTrafficLogging", "TRUE");
         properties.setProperty("JaxB.baseUrlPropertyName", "http://freegeoip.net/");
+        properties.setProperty("JaxB.noTrafficLog", "FALSE");
     }
 
     @Before
@@ -59,6 +64,12 @@ public class JaxBTest {
         mockRetrofit = new MockRetrofit.Builder(retrofitJaxB)
                 .networkBehavior(networkBehavior)
                 .build();
+    }
+
+    @Test
+    public void testClientInject() {
+        assertNotNull(retrofitJaxB);
+        assertNotNull(retrofitJaxBNoLog);
     }
 
     @Test
