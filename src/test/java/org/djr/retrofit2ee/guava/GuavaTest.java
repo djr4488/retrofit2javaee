@@ -38,8 +38,8 @@ public class GuavaTest {
             baseUrlPropertyName = "Guava.baseUrlPropertyName")
     private Retrofit retrofitGuava;
     @Inject
-    @RetrofitGuava(captureTrafficLogsPropertyName = "Guava.enableTrafficLogging",
-            baseUrlPropertyName = "Guava.noTrafficLog")
+    @RetrofitGuava(captureTrafficLogsPropertyName = "Guava.noTrafficLog",
+            baseUrlPropertyName = "Guava.baseUrlPropertyName")
     private Retrofit retrofitGuavaNoLog;
     @Produces
     @RetrofitProperties
