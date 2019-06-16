@@ -2,6 +2,7 @@ package org.djr.retrofit2ee;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Qualifier;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,5 +41,9 @@ public class RetrofitPropertyLoader {
         prop.load(in);
         in.close();
         return prop;
+    }
+
+    public String retrieveProperty(InjectionPoint injectionPoint, String propertyName) {
+        return null;
     }
 }

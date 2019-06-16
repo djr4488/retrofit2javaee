@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.djr.retrofitee</groupId>
-    <artifactId>retrofitee-core</artifactId>
+    <groupId>io.github.djr4488</groupId>
+    <artifactId>retrofit-ee</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
          
@@ -17,9 +17,9 @@
         <retrofit.version>2.4.0</retrofit.version>
         <okhttp3.version>3.10.0</okhttp3.version>
         <wire.version>2.2.0</wire.version>
-        <jackson.version>2.9.4</jackson.version>
+        <jackson.version>2.9.9</jackson.version>
         <jsoup.version>1.11.2</jsoup.version>
-
+        <cdi.utilities>2.2.1</cdi.utilities>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -52,6 +52,14 @@
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- property management -->
+        <dependency>
+            <groupId>io.github.djr4488</groupId>
+            <artifactId>cdilib.utils</artifactId>
+            <version>2.2.1</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- retrofit2-javaee -->
@@ -240,6 +248,14 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- configuration -->
+        <dependency>
+            <groupId>io.github.djr4488</groupId>
+            <artifactId>cdilib.utils</artifactId>
+            <version>2.2.0</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- testing -->
         <dependency>
             <groupId>junit</groupId>
@@ -296,6 +312,13 @@
             <version>${retrofit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.exabrial</groupId>
+            <artifactId>mockito-object-injection</artifactId>
+            <version>1.0.3</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -359,4 +382,64 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.8</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
