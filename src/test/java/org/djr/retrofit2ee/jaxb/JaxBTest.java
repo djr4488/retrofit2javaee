@@ -37,12 +37,13 @@ public class JaxBTest {
     private static Logger log = LoggerFactory.getLogger(JaxBTest.class);
     @Inject
     @RetrofitJaxB(captureTrafficLogsPropertyName = "JaxB.enableTrafficLogging",
-            baseUrlPropertyName = "JaxB.baseUrlPropertyName")
+            baseUrlPropertyName = "JaxB.baseUrlPropertyName",
+            customJAXBContextName = "testCustomJAXBContext")
     private Retrofit retrofitJaxB;
-    @Inject
-    @RetrofitJaxB(captureTrafficLogsPropertyName = "JaxB.noTrafficLog",
-            baseUrlPropertyName = "JaxB.baseUrlPropertyName")
-    private Retrofit retrofitJaxBNoLog;
+//    @Inject
+//    @RetrofitJaxB(captureTrafficLogsPropertyName = "JaxB.noTrafficLog",
+//            baseUrlPropertyName = "JaxB.baseUrlPropertyName")
+//    private Retrofit retrofitJaxBNoLog;
     @Produces
     @RetrofitProperties
     private Properties properties = new Properties();
@@ -69,7 +70,7 @@ public class JaxBTest {
     @Test
     public void testClientInject() {
         assertNotNull(retrofitJaxB);
-        assertNotNull(retrofitJaxBNoLog);
+        //assertNotNull(retrofitJaxBNoLog);
     }
 
     @Test

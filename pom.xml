@@ -14,8 +14,8 @@
     <url>https://github.com/djr4488/retrofit2javaee</url>     
          
     <properties>
-        <retrofit.version>2.4.0</retrofit.version>
-        <okhttp3.version>3.10.0</okhttp3.version>
+        <retrofit.version>2.9.0</retrofit.version>
+        <okhttp3.version>3.14.9</okhttp3.version>
         <wire.version>2.2.0</wire.version>
         <jackson.version>2.9.9</jackson.version>
         <jsoup.version>1.11.2</jsoup.version>
